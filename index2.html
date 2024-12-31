@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aditi Chandrashekar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #fff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            width: 100%;
+            height: 200px; /* Height for the translucent banner */
+            background: rgba(128, 0, 32, 0.5); /* More Translucent Burgundy */
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: normal;
+            color: #800020; /* Burgundy */
+            text-align: left; /* Left align */
+            position: absolute;
+            top: 50%;
+            left: 2rem; /* Align with other sections */
+            transform: translateY(-50%);
+            margin: 0;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin: 3rem 0; /* Adjusted vertical space */
+        }
+
+        .profile-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #468b97; /* Muted darker blue-green */
+            margin-bottom: 0.5rem; /* Reduced margin below image */
+        }
+
+        .profile-section h2 {
+            font-size: 1.4rem;
+            font-weight: normal;
+            margin-top: 0.5rem;
+            color: #800020; /* Burgundy */
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .buttons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #800020; /* Burgundy */
+            color: #fff;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .content-section {
+            margin: 2rem;
+            padding: 1rem 0;
+        }
+
+        .content-section h2 {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            font-weight: 400;
+            color: #800020; /* Burgundy */
+        }
+
+        .content-section p {
+            font-weight: 300;
+            color: #333;
+        }
+
+        .intro-text {
+            font-style: italic;
+            color: #000080; /* Navy blue */
+            margin-bottom: 1rem;
+            text-align: center; /* Center the first sentence */
+        }
+
+        .bio-text {
+            text-align: left; /* Left-align the remaining text */
+        }
+
+        .news-item, .project-item {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .news-item span, .project-item span {
+            font-weight: bold;
+            color: #800020; /* Burgundy */
+        }
+
+        .news-item p, .project-item p {
+            margin: 0;
+            padding-left: 0.5rem;
+        }
+
+        footer {
+            width: 100%;
+            height: 200px; /* Height for the translucent footer banner */
+            background: rgba(128, 0, 32, 0.5); /* More Translucent Burgundy */
+            text-align: center;
+            padding: 2rem 1rem;
+            font-size: 0.9rem;
+            color: #fff; /* White for better contrast */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ADITI CHANDRASHEKAR</h1>
+    </header>
+
+    <main>
+        <!-- Profile Section -->
+        <section class="profile-section">
+            <img src="https://aditijc.github.io/images/profile_pic.jpeg" alt="Aditi Chandrashekar">
+            <h2>Machine Learning Researcher</h2>
+
+            <div class="buttons">
+                <a href="https://github.com/aditijc" target="_blank" title="GitHub">G</a>
+                <a href="mailto:ajchandr@caltech.edu" target="_blank" title="Email">E</a>
+                <a href="https://www.linkedin.com/in/aditi-chandrashekar-1042881b4/" target="_blank" title="LinkedIn">L</a>
+            </div>
+        </section>
+
+        <!-- Bio Section -->
+        <section class="content-section">
+            <p class="intro-text">I am passionate about using machine learning to learn more about how the world around us works.</p>
+            <p class="bio-text">
+                <strong>In my research, I am interested in the following two questions.</strong><br>
+                1. How can we build models that effectively capture the underlying dynamics of the brain? <br>
+                2. How can this understanding inform and enhance our models?<br>
+                </br>
+                In my ongoing senior thesis, I aim to solve inverse problems using robust equivariant learning in diffusion models.
+                My recent work at the Allen Institute for Brain Sciences involved leveraging lightweight transformer architectures 
+                to study Alzheimer's disease. I’ve also worked on improving functional ultrasound imaging using diffusion models, 
+                unrolled architectures, and neural operators for use in brain-machine interfaces. 
+                My experience spans across various fields, from neuroscience, to autonomous systems and explainable AI (XAI). 
+                Alongside my research, I’ve been a teaching assistant and tutor, and I’ve been recognized with several fellowships 
+                for my contributions. In my free time I enjoy playing various instruments including the Guitar and Bass Clarinet.
+            </p>
+        </section>
+
+        <!-- News Section -->
+        <section class="content-section">
+            <h2>News</h2>
+            <div class="news-item">
+                <span>Jan 2025</span>
+                <p>Applying for PhD Programs!</p>
+            </div>
+            <div class="news-item">
+                <span>Sept 2024</span>
+                <p>Presented TabVI!</p>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="content-section">
+            <h2>Projects</h2>
+            <div class="project-item">
+                <span>Dark Matter Diffusion</span>
+                <p>A debiasing method to predict dark matter distribution from observations such as stellar mass, fast radio bursts, and gravitational lensing.</p>
+            </div>
+            <div class="project-item">
+                <span>Medical Imaging</span>
+                <p>Projects in functional ultrasound imaging and MRI.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Aditi Chandrashekar. All rights reserved.</p>
+    </footer>
+</body>
+</html>
