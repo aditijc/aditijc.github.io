@@ -19,11 +19,13 @@
             width: 100%;
             /* height: 200px;  */
 			/* height: 500px; */
-            background-image: url('https://aditijc.github.io/images/banner_noname.png'); 
+            background-image: url('https://aditijc.github.io/images/header_large.png'); 
 			/* background-image: url('https://aditijc.github.io/images/banner_full.png'); */
             background-size: cover;
             background-position: center;
             position: relative;
+			text-align: center;
+            margin: 1rem 0; /* Reduced vertical spacing */
         }
 
         header h1 {
@@ -36,6 +38,21 @@
             left: 2rem; /* Align with other sections */
             transform: translateY(-50%);
             margin: 0;
+        }
+
+		header img {
+            width: 300px; /* Double the size */
+            height: 300px;
+            border-radius: 75%;
+            border: none; /* Removed border */
+            margin-bottom: 1rem; /* Increased margin below image */
+        }
+		
+		header h2 {
+            font-size: 1.4rem;
+            font-weight: normal;
+            margin-top: 0.5rem;
+            color: #800020; /* Burgundy */
         }
 
         .profile-section {
@@ -127,7 +144,7 @@
         footer {
             width: 100%;
             height: 150px; /* Reduced height for the footer banner */
-            background: rgba(128, 0, 32, 0.5); /* More Translucent Burgundy */
+            background: rgb(128, 0, 32); /* Burgundy */
             text-align: center;
             padding: 1rem 1rem;
             font-size: 0.9rem;
@@ -145,7 +162,16 @@
             height: 150px;
         }
 
+		header img {
+            width: 150px; /* Smaller avatar size */
+            height: 150px;
+        }
+
         .profile-section h2 {
+            font-size: 1.2rem; /* Adjust heading size */
+        }
+
+		header h2 {
             font-size: 1.2rem; /* Adjust heading size */
         }
 
@@ -174,6 +200,11 @@
             height: 120px;
         }
 
+		header img {
+            width: 120px; /* Further reduce avatar size */
+            height: 120px;
+        }
+
         .buttons a img {
             width: 25px; /* Reduce button image size for mobile */
             height: 25px;
@@ -188,12 +219,7 @@
 <body>
     <header>
         <h1>ADITI J. CHANDRASHEKAR</h1>
-    </header>
-
-    <main>
-        <!-- Profile Section -->
-        <section class="profile-section">
-            <img src="https://aditijc.github.io/images/profile_pic.jpeg" alt="Aditi Chandrashekar">
+		<img src="https://aditijc.github.io/images/profile_pic.jpeg" alt="Aditi Chandrashekar">
             <!-- <h2>Machine Learning Researcher</h2> -->
 			<h2>AI for Science</h2>
 
@@ -208,7 +234,26 @@
 					<img src="https://aditijc.github.io/images/linkedin.png" alt="LinkedIn Logo" style="width: 40px; height: 40px;">
 				</a>
             </div>
-        </section>
+    </header>
+
+    <main>
+        <!-- Profile Section -->
+        <!-- <section class="profile-section">
+            <img src="https://aditijc.github.io/images/profile_pic.jpeg" alt="Aditi Chandrashekar">
+			<h2>AI for Science</h2>
+
+            <div class="buttons">
+                <a href="https://github.com/aditijc" target="_blank" title="GitHub">
+					<img src="https://aditijc.github.io/images/github.png" alt="GitHub Logo" style="width: 40px; height: 40px;">
+				</a>
+				<a href="mailto:ajchandr@caltech.edu" target="_blank" title="Email">
+					<img src="https://aditijc.github.io/images/email.png" alt="Email Icon" style="width: 40px; height: 40px;">
+				</a>
+				<a href="https://www.linkedin.com/in/aditi-chandrashekar-1042881b4/" target="_blank" title="LinkedIn">
+					<img src="https://aditijc.github.io/images/linkedin.png" alt="LinkedIn Logo" style="width: 40px; height: 40px;">
+				</a>
+            </div>
+        </section> -->
 
         <!-- Bio Section -->
         <section class="content-section">
