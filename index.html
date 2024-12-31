@@ -133,6 +133,56 @@
             font-size: 0.9rem;
             color: #fff; /* White for better contrast */
         }
+
+	    /* Media Queries for Responsiveness */
+		@media (max-width: 768px) {
+        .content-section {
+            margin: 2rem 1.5rem; /* Smaller margins for tablets */
+        }
+
+        .profile-section img {
+            width: 150px; /* Smaller avatar size */
+            height: 150px;
+        }
+
+        .profile-section h2 {
+            font-size: 1.2rem; /* Adjust heading size */
+        }
+
+        .news-item, .project-item {
+            grid-template-columns: 1fr; /* Single column for smaller screens */
+        }
+
+        .buttons a img {
+            width: 30px; /* Reduce button image size */
+            height: 30px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .content-section {
+            margin: 1.5rem 1rem; /* Smaller margins for mobile */
+        }
+
+        header h1 {
+            font-size: 1.2rem; /* Smaller font size for header */
+            left: 1rem;
+        }
+
+        .profile-section img {
+            width: 120px; /* Further reduce avatar size */
+            height: 120px;
+        }
+
+        .buttons a img {
+            width: 25px; /* Reduce button image size for mobile */
+            height: 25px;
+        }
+
+        .news-item, .project-item {
+            grid-template-columns: 1fr; /* Single column layout */
+        }
+    }
     </style>
 </head>
 <body>
