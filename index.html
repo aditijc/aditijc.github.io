@@ -233,13 +233,83 @@
             width: 60px; /* Reduce button image size */
             height: 60px;
         }
+        .publications .publication {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+        }
+        .publications .pub-image {
+        flex: 0 0 120px;
+        margin-right: 1rem;
+        }
+        .publications .pub-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 4px;
+        }
+        .publications .pub-details h3 {
+        margin: 0 0 0.25rem;
+        font-size: 1.1rem;
+        }
+        .publications .authors,
+        .publications .venue {
+        margin: 0.25rem 0;
+        line-height: 1.4;
+        }
+        .publications a {
+        color: inherit;
+        text-decoration: underline;
+        }
     }
 
     @media (max-width: 480px) {
         .content-section {
             margin: 1rem 1rem; /* Smaller margins for mobile */
         }
+        .publications .publication {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            margin-bottom: 2rem;
+        }
 
+        /* full-width thumbnail */
+        .publications .pub-image {
+            width: 100%;
+            margin: 0 0 1rem;
+        }
+        .publications .pub-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* make heading a bit larger / bolder on mobile */
+        .publications .pub-details h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* button container: first button full width;
+            the other two split second row */
+        .publications .pub-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .publications .pub-buttons a {
+            text-align: center;
+            padding: 0.75rem;
+            border-radius: 4px;
+            flex: 1 1 100%;
+        }
+        /* all buttons except the first become half-width */
+        .publications .pub-buttons a + a {
+            flex: 1 1 calc(50% - 0.5rem);
+        }
 		header {
             background-image: url('https://aditijc.github.io/images/header_large.png'); 
 			height: 275px;
@@ -281,7 +351,7 @@
 		</h1>
 		<img src="https://aditijc.github.io/images/profile_pic.jpeg" alt="Aditi Chandrashekar">
             <!-- <h2>Machine Learning Researcher</h2> -->
-            <p>Computer Science Department, NYU Courant Institute of Mathematical Sciences</p>
+            <h3>AI for Science</h3>
             <div class="buttons">
                 <a href="https://github.com/aditijc" target="_blank" title="GitHub">
 					<img src="https://aditijc.github.io/images/github_white.png" alt="GitHub Logo" style="width: 60px; height: 60px;">
@@ -321,7 +391,7 @@
 
         <!-- Bio Section -->
         <section class="content-section">
-            <p class="intro-text">I am passionate about using machine learning to learn more about how the world works.</p>
+            <p class="intro-text">Computer Science Department, NYU Courant Institute of Mathematical Sciences</p>
             <p class="bio-text">
                                 <!-- In my ongoing senior thesis, I aim to solve inverse problems using robust equivariant learning in diffusion models.
                 My recent work at the Allen Institute for Brain Sciences involved leveraging lightweight transformer architectures 
@@ -330,6 +400,7 @@
 				<!-- Alongside my research, I’ve been a teaching assistant and tutor, and I’ve been recognized with several fellowships 
                 for my contributions.  -->
 				<!-- <br></br> -->
+                <!-- I am passionate about using machine learning to learn more about how the world works. -->
                 I am an incoming Ph.D. student in Computer Science at NYU’s Courant Institute of Mathematical Sciences. 
 				<!-- <strong>The following two questions drive many of my current research endeavors.</strong><br>
                 1. How can we build models that effectively capture the underlying dynamics of complex systems (like the brain)? <br>
@@ -369,7 +440,7 @@
         </section>
 
         <!-- Projects Section -->
-        <section class="content-section">
+        <!-- <section class="content-section">
             <h2>Selected Publications</h2>
                 <p><b>EquiReg: Equivariance Regularized Diffusion for Inverse Problems</b>
                     </br>
@@ -397,7 +468,28 @@
 				</p>
 
 			
-        </section>
+        </section> -->
+        <section class="content-section publications">
+            <h2>Selected Publications</h2>
+          
+            <div class="publication">
+              <div class="pub-image">
+                <img src="images/equireg-thumbnail.png" alt="EquiReg paper thumbnail">
+              </div>
+              <div class="pub-details">
+                <h3>EquiReg: Equivariance Regularized Diffusion for Inverse Problems</h3>
+                <p class="authors">
+                  Bahareh Tolooshams*, <strong>Aditi Chandrashekar*</strong>, Rayhan Zirvi*, … and Anima Anandkumar
+                </p>
+                <p class="venue">
+                  <em>Submitted to NeurIPS 2025</em>  
+                  [<a href="https://arxiv.org/pdf/2505.22973" target="_blank">paper</a>]
+                </p>
+              </div>
+            </div>
+          
+            <!-- repeat one .publication per entry -->
+          </section>
         <section class="content-section">
             <h2>Posters/ Talks</h2>
                 <p><b>Learning Biologically Meaningful Cellular Representations using Transformer Architectures</b>
