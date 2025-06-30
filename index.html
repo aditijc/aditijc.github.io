@@ -23,7 +23,43 @@
             padding: 0;
             line-height: 1.6;
         }
+        .publications .publication {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            gap: 1rem;               /* spaces image ↔ text */
+        }
 
+        .publications .pub-image {
+            flex: 0 0 120px;         /* fixed thumbnail width */
+            margin: 0;               /* reset any extra */
+        }
+
+        .publications .pub-image img {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .publications .pub-details {
+            flex: 1;                 /* fill remaining row */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* vertical centering */
+        }
+
+        .publications .authors,
+        .publications .venue {
+            margin: 0.25rem 0;
+            line-height: 1.4;
+        }
+
+        .publications a {
+            color: inherit;
+            text-decoration: underline;
+        }
         header {
             width: 100%;
 			/* height: 100%; */
@@ -347,9 +383,9 @@
 <body>
     <header>
         <h1>
-			<!-- <a href="https://aditijc.github.io" target="_blank" rel="noopener noreferrer"> -->
-            Aditi Chandrashekar
-			<!-- </a> -->
+			<a href="https://aditijc.github.io" target="_blank" rel="noopener noreferrer">
+            <strong>Aditi Chandrashekar</strong>
+			</a>
 		</h1>
 		<img src="https://aditijc.github.io/images/profile_pic.jpeg" alt="Aditi Chandrashekar">
             <!-- <h2>Machine Learning Researcher</h2> -->
