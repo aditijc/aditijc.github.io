@@ -90,7 +90,7 @@
 
 		header img {
             width: 300px; /* Double the size */
-            height: 300px;
+            height: 310px;
 			top: 75%;
             border-radius: 75%;
             border: 2rem; /* Removed border */
@@ -154,7 +154,7 @@
 
         .content-section {
 			margin-top: 0rem;
-            margin: 12rem 12rem; /* Increased horizontal margins */
+            margin: 3rem 12rem; /* Increased horizontal margins */
             padding: 0rem 0; /* Reduced vertical padding */
         }
 
@@ -181,8 +181,9 @@
 
         .intro-text {
             font-style: italic;
-			/* font-weight: bold !important;
-            color: #800020 !important;  */
+            font-size: 1.1rem !important;
+			font-weight: 400 !important;
+            /* color: #800020 !important;  */
             margin-bottom: 1rem; /* Reduced bottom margin */
             text-align: center; /* Center the first sentence */
         }
@@ -220,17 +221,17 @@
         }
 
 		a {
-			color: #a82500ff; /* Burgundy */
+			color: #a82500ff !important; /* Burgundy */
 			text-decoration: none; /* Removes underline */
 		}
 
 		a:hover {
-			color: #ffd8af; /* Dark gray for hover */
+			color: #de7300 !important; /* Dark gray for hover */
 			text-decoration: underline; /* Adds underline on hover */
 		}
 
 		a:visited {
-			color: rgb(235, 153, 0); /* Different color for visited links */
+			color: rgb(235, 153, 0) !important; /* Different color for visited links */
 		}
 
 
@@ -351,7 +352,7 @@
         }
 		header {
             background-image: url('https://aditijc.github.io/images/header_large.png'); 
-			height: 275px;
+			height: 300px;
 			top: 90%;
 		}
 
@@ -384,13 +385,15 @@
 <body>
     <header>
         <h1>
-			<a href="https://aditijc.github.io" target="_blank" rel="noopener noreferrer">
-            Aditi Chandrashekar
-			</a>
+			<!-- <a href="https://aditijc.github.io" target="_blank" rel="noopener noreferrer">
+            <b>Aditi</b> Chandrashekar
+			</a> -->
+            <b>Aditi</b> Chandrashekar
 		</h1>
 		<img src="https://aditijc.github.io/images/profile_pic.jpeg" alt="Aditi Chandrashekar">
             <!-- <h2>Machine Learning Researcher</h2> -->
-            <h3>AI for Science</h3>
+            <!-- <h3>AI for Science</h3> -->
+            <!-- <p class="intro-text">Courant Institute of Mathematical Sciences, NYU</p> -->
             <div class="buttons">
                 <a href="https://github.com/aditijc" target="_blank" title="GitHub">
 					<img src="https://aditijc.github.io/images/github_white.png" alt="GitHub Logo" style="width: 60px; height: 60px;">
@@ -542,35 +545,99 @@
 
         </div>
 
-        <h2>Posters/ Talks</h2>
-                <p><b>Multi-Modal Diffusion Models to Reconstruct Dark Matter Fields</b>
+        <h2>Posters/ Talks</h2>            <div class="publications">
+            <div class="publication">
+              <div class="pub-image">
+                <img src="images/thumbs/dmdiff-thumbnail.png" alt="dmdiff paper thumbnail">
+              </div>
+              <div class="pub-details">
+                <h3>Multi-Modal Diffusion Models to Reconstruct Dark Matter Fields</h3>
+                <p class="authors">
+                    <b>Aditi Chandrashekar</b>, Saumya Chauhan, Eshani Patel, Maria Vazhaeparambil</p>
+                <p class="venue">
+                  <em>In Preparation, 2025</em>  
+                  [<a href="https://github.com/epatel16/Dark-Matter-Diffusion" target="_blank">code</a>]
+                </p>
+              </div>
+            </div>
+
+            <div class="publication">
+                <div class="pub-image">
+                  <img src="images/thumbs/tabvi-thumbnail.png" alt="TabVI paper thumbnail">
+                </div>
+                <div class="pub-details">
+                  <h3>Learning Biologically Meaningful Cellular Representations using Transformer Architectures</h3>
+                  <p class="authors">
+                    <b>Aditi Chandrashekar</b>, Rohan Gala, Andreas Tjärnberg, Saniya Khullar, Grace Huynh, Mariano Gabitto                </p>
+                  <p class="venue">
+                    <em>SURF Seminar at Caltech/ ISCB-LATAM SoIBio CCBCOL, 2024</em>  
+                    [<a href="https://aditijc.github.io/assets/SURF_poster_2024.pdf" target="_blank" rel="noopener noreferrer">poster</a>, <a href="https://www.biorxiv.org/content/10.1101/2025.02.13.637984v1" target="_blank" rel="noopener noreferrer">paper</a>]
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="publication">
+                <div class="pub-image">
+                <img src="images/thumbs/indy-thumbnail.png" alt="INDY paper thumbnail">
+                </div>
+                <div class="pub-details">
+                <h3>Building a Testbed for Motion Planning and Control Algorithms on a Modified RC car</h3>
+                <p class="authors">
+                    <b>Aditi Chandrashekar</b>, John Lathrop, Ben Riviere, Soon-Jo Chung
+                </p>
+                <p class="venue">
+                    <em>SURF Seminar at Caltech, 2023</em>  
+                    [<a href="https://fascinated-hour-94a.notion.site/Building-an-Autonomous-Testbed-for-Motion-Planning-Algorithms-on-a-modified-RC-Car-16f81b88167c80669484fce2bce8dfbf" target="_blank" rel="noopener noreferrer">paper</a>, <a href="https://aditijc.github.io/assets/SURF2023_FinalPres.pdf" target="_blank" rel="noopener noreferrer">slides</a>]
+                </p>
+                </div>
+            </div>
+
+            <div class="publication">
+                <div class="pub-image">
+                <img src="images/thumbs/mdad-thumbnail.png" alt="MDAD paper thumbnail">
+                </div>
+                <div class="pub-details">
+                <h3>Feature Selection using Explainable AI to Refine Associations between Prominent Genes and Alzheimer’s
+					Disease Neuropathology</h3>
+                <p class="authors">
+                    <b>Aditi Chandrashekar</b>, Nicasia Beebe-Wang, Su-In Lee                
+                </p>
+                <p class="venue">
+                    <em>SURF Seminar at Caltech, 2022</em>  
+                    [<a href="https://fascinated-hour-94a.notion.site/Explainable-AI-to-Refine-Associations-between-Prominent-Genes-and-Alzheimer-s-Disease-Neuropathology-0872b5bfec654917845b770c6fbf2ef1" target="_blank" rel="noopener noreferrer">paper</a>]                </p>
+                </div>
+            </div>
+
+        </div>
+                <!-- <p><b>Multi-Modal Diffusion Models to Reconstruct Dark Matter Fields</b>
                 </br>
                 Aditi Chandrashekar, Saumya Chauhan, Eshani Patel, Maria Vazhaeparambil
                 </br>
                 <i>In Preparation, 2025</i> 
                     [<a href="https://github.com/epatel16/Dark-Matter-Diffusion" target="_blank" rel="noopener noreferrer">code</a>]
-                </p>
-                <p><b>Learning Biologically Meaningful Cellular Representations using Transformer Architectures</b>
+                </p> -->
+                <!-- <p><b>Learning Biologically Meaningful Cellular Representations using Transformer Architectures</b>
 					</br>
 					Aditi Chandrashekar, Mariano Gabitto
 					</br>
 					<i>SURF Seminar at Caltech/ Accepted at ISCB-LATAM SoIBio CCBCOL, 2024</i> [<a href="https://aditijc.github.io/assets/SURF_poster_2024.pdf" target="_blank" rel="noopener noreferrer">poster</a>, <a href="https://www.biorxiv.org/content/10.1101/2025.02.13.637984v1" target="_blank" rel="noopener noreferrer">paper</a>]
-				</p>
+				</p> -->
 
-				<p><b>Building a Testbed for Motion Planning and Control Algorithms on a Modified RC car</b>
+				<!-- <p><b>Building a Testbed for Motion Planning and Control Algorithms on a Modified RC car</b>
 				</br>
 				Aditi Chandrashekar, John Lathrop, Ben Riviere, Soon-Jo Chung
 				</br>
 				<i>SURF Seminar at Caltech, 2023</i> [<a href="https://fascinated-hour-94a.notion.site/Building-an-Autonomous-Testbed-for-Motion-Planning-Algorithms-on-a-modified-RC-Car-16f81b88167c80669484fce2bce8dfbf" target="_blank" rel="noopener noreferrer">paper</a>, <a href="https://aditijc.github.io/assets/SURF2023_FinalPres.pdf" target="_blank" rel="noopener noreferrer">slides</a>]
-				</p>
+				</p> -->
 
-				<p><b>Feature Selection using Explainable AI to Refine Associations between Prominent Genes and Alzheimer’s
+				<!-- <p><b>Feature Selection using Explainable AI to Refine Associations between Prominent Genes and Alzheimer’s
 					Disease Neuropathology</b>
 				</br>
 				Aditi Chandrashekar, Nicasia Beebe-Wang, Su-In Lee
 				</br>
 				<i>SURF Seminar at Caltech, 2022</i> [<a href="https://fascinated-hour-94a.notion.site/Explainable-AI-to-Refine-Associations-between-Prominent-Genes-and-Alzheimer-s-Disease-Neuropathology-0872b5bfec654917845b770c6fbf2ef1" target="_blank" rel="noopener noreferrer">paper</a>]
-				</p>
+				</p> -->
         </section>
 
     
