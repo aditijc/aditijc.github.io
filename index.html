@@ -312,11 +312,14 @@
 
     @media (max-width: 480px) {
         body {
-            font-family: 'Futura';
+            font-family: 'Lato', sans-serif;
         }
         .content-section {
-            margin: 1rem 1rem; /* Smaller margins for mobile */
+            margin: 9rem 1rem; /* Smaller margins for mobile */
         }
+        /* .content-section p {
+            font-size: 0.9rem;
+        } */
         .publications .publication {
             display: flex;
             flex-direction: column;
@@ -338,7 +341,7 @@
 
         /* make heading a bit larger / bolder on mobile */
         .publications .pub-details h3 {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             margin-bottom: 0.5rem;
         }
 
@@ -362,13 +365,14 @@
         }
 		header {
             background-image: url('https://aditijc.github.io/images/header_large.png'); 
-			height: 300px;
-			top: 90%;
+			height: 100px;
+			top: 70%;
 		}
 
         header h1 {
             font-size: 1rem; /* Smaller font size for header */
             left: 1rem;
+            top:1.4rem;
         }
 
         /* .profile-section img {
@@ -381,9 +385,17 @@
             height: 120px;
         }
 
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.08rem;
+            margin-top: 0.5rem; /* Reduced vertical spacing */
+			margin-bottom: 0.1rem; /* Reduced space below buttons */
+        }
+
         .buttons a img {
-            width: 25px; /* Reduce button image size for mobile */
-            height: 25px;
+            width: 40px !important; /* Reduce button image size for mobile */
+            height: 40px !important;
         }
 
         .news-item, .project-item {
