@@ -11,470 +11,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aditi Chandrashekar</title>
+      <!-- PicoCSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+
+    <!-- Your custom stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+
+    <!-- favicon, fonts, etc. -->
     <link rel="icon" href="/images/icon.png" sizes="32x32" type="image/png">
-    <style>
-        /* body {
-            font-family: 'Lato', sans-serif;
-            background-color: #feeadfff;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        } */
-        body {
-            font-family: 'Poppins';
-            background-color: #1e1e1e;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-        .publications .publication {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-            gap: 1rem;               /* spaces image ↔ text */
-        }
-
-        .publications .pub-image {
-            flex: 0 0 170px;         /* fixed thumbnail width */
-            margin: 0;               /* reset any extra */
-        }
-
-        .publications .pub-image img {
-            display: block;
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        .publications .pub-details {
-            flex: 1;                 /* fill remaining row */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* vertical centering */
-        }
-
-        .publications .authors,
-        .publications .venue {
-            margin: 0.25rem 0;
-            line-height: 1.4;
-        }
-
-        .publications a {
-            color: inherit;
-            text-decoration: underline;
-        }
-        header {
-            width: 100%;
-			/* height: 100%; */
-            /* height: 200px;  */
-			height: 375px;
-            background-color: #1e1e1e;
-            background-image: url('https://aditijc.github.io/images/header.png'); 
-			/* background-image: url('https://aditijc.github.io/images/banner_full.png'); */
-            /* background-size: cover; */
-			background-size: cover; 
-    		background-repeat: no-repeat; /* Prevent repeating */
-            background-position: top;
-            position: relative;
-			text-align: center;
-            margin: 0rem 0; /* Reduced vertical spacing */
-        }
-
-        header h1 {
-            font-size: 1.5rem; /* Smaller text size */
-            font-weight: normal;
-            color: rgb(255, 255, 255); /* Burgundy */
-            text-align: left; /* Left align */
-            position: absolute;
-            top: 10%;
-            left: 2rem; /* Align with other sections */
-            transform: translateY(-50%);
-            margin: 0;
-        }
-
-		header img {
-            width: 300px; /* Double the size */
-            height: 310px;
-			top: 75%;
-            border-radius: 75%;
-            border: 2rem; /* Removed border */
-            margin-bottom: 1rem; /* Increased margin below image */
-        }
-		
-		header h2 {
-            font-size: 1.75rem;
-            font-weight: normal;
-            margin-top: 0.75rem;
-            color: #a82500ff; /* Burgundy */
-        }
-
-        header h3 {
-            font-size: 1.75rem;
-            font-weight: normal;
-            margin-top: 0.75rem;
-            color: rgb(255, 255, 255); /* Burgundy */
-        }
-
-        /* .profile-section {
-            text-align: center;
-            margin: 1rem 0; 
-        }
-
-        .profile-section img {
-            width: 300px; 
-            height: 300px;
-            border-radius: 75%;
-            border: none; 
-            margin-bottom: 1rem; 
-        }
-
-        .profile-section h2 {
-            font-size: 1.4rem;
-            font-weight: normal;
-            margin-top: 0.5rem;
-            color: #800020;
-        } */
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem; /* Reduced vertical spacing */
-			margin-bottom: 0.3rem; /* Reduced space below buttons */
-        }
-
-        .buttons a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-            /* background: #800020; Burgundy */
-            /* color: #fff; */
-            /* border-radius: 50%; */
-            /* text-decoration: none;
-            font-size: 1.2rem; */
-        }
-
-        .content-section {
-			margin-top: 0rem;
-            margin: 3rem 15rem; /* Increased horizontal margins */
-            padding: 0rem 0; /* Reduced vertical padding */
-        }
-
-        .content-section h2 {
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            margin-bottom: 0.25rem; /* Reduced bottom margin */
-            font-weight: 400;
-            color: rgb(184, 30, 3); /* Burgundy */
-        }
-
-        .content-section h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem; /* Reduced bottom margin */
-            font-weight: 400;
-            color: rgb(255, 255, 255); /* Burgundy */
-        }
-
-        .content-section p {
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: #ffffff;
-        }
-
-        .intro-text {
-            font-style: italic;
-            font-size: 1.1rem !important;
-			font-weight: 400 !important;
-            /* color: #800020 !important;  */
-            margin-bottom: 1rem; /* Reduced bottom margin */
-            text-align: center; /* Center the first sentence */
-        }
-
-        .bio-text {
-            text-align: left; /* Left-align the remaining text */
-            margin-bottom: 0rem;
-        }
-
-        .news-item, .project-item {
-            display: grid;
-            grid-template-columns: 150px 1fr;
-            align-items: left;
-            margin-bottom: .5rem; /* Reduced bottom margin */
-        }
-
-        .news-item span, .project-item span {
-            font-weight: bold;
-            color: rgb(255, 255, 255); /* Burgundy */
-        }
-
-        .news-item p, .project-item p {
-            margin: 0;
-            padding-left: 0.5rem;
-        }
-
-        footer {
-            width: 100%;
-            height: 150px; /* Reduced height for the footer banner */
-            background: #292929;/* rgb(96, 0, 24);  Burgundy */
-            text-align: center;
-            padding: 1rem 1rem;
-            font-size: 0.9rem;
-            color: rgb(255, 255, 255); /* White for better contrast */
-        }
-
-		a {
-			color: rgb(182, 28, 1) !important; /* Burgundy */
-			text-decoration: none; /* Removes underline */
-		}
-
-		a:hover {
-			color: #de7300 !important; /* Dark gray for hover */
-			text-decoration: underline; /* Adds underline on hover */
-		}
-
-		a:visited {
-			color: rgb(235, 153, 0) !important; /* Different color for visited links */
-		}
-
-
-	    /* Media Queries for Responsiveness */
-		@media (max-width: 1000px) {
-        .content-section {
-            margin: 2.5rem 2.5rem; /* Smaller margins for tablets */
-        }
-
-        /* .profile-section img {
-            width: 150px;
-            height: 150px;
-        } */
-
-		header img {
-            width: 190px; /* Smaller avatar size */
-            height: 190px;
-			margin-top: 1rem;
-        }
-
-        /* .profile-section h2 {
-            font-size: 1.2rem; 
-        } */
-
-		header h2 {
-            font-size: 1.2rem; /* Adjust heading size */
-        }
-        header h3 {
-            font-size: 1.2rem; /* Adjust heading size */
-        }
-
-        .news-item, .project-item {
-            grid-template-columns: 1fr; /* Single column for smaller screens */
-        }
-
-        .buttons a img {
-            width: 60px; /* Reduce button image size */
-            height: 60px;
-        }
-        .publications .publication {
-        display: flex;
-        align-items: flex-start;
-        margin-bottom: 2rem;
-        }
-        .publications .pub-image {
-        flex: 0 0 120px;
-        margin-right: 1rem;
-        }
-        .publications .pub-image img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-        border-radius: 4px;
-        }
-        .publications .pub-details {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center; /* vertically center H3 + authors if you like */
-        }
-        .publications .authors,
-        .publications .venue {
-        margin: 0.25rem 0;
-        line-height: 1.4;
-        }
-        .publications a {
-        color: inherit;
-        text-decoration: underline;
-        }
-    }
-
-    @media (max-width: 480px) {
-        body {
-            font-family: 'Lato', sans-serif;
-        }
-        .content-section {
-            margin: 9rem 1rem; /* Smaller margins for mobile */
-        }
-        /* .content-section p {
-            font-size: 0.9rem;
-        } */
-        .publications .publication {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            margin-bottom: 2rem;
-        }
-
-        /* full-width thumbnail */
-        .publications .pub-image {
-            width: 100%;
-            margin: 0 0 1rem;
-        }
-        .publications .pub-image img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        /* make heading a bit larger / bolder on mobile */
-        .publications .pub-details h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* button container: first button full width;
-            the other two split second row */
-        .publications .pub-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        .publications .pub-buttons a {
-            text-align: center;
-            padding: 0.75rem;
-            border-radius: 4px;
-            flex: 1 1 100%;
-        }
-        /* all buttons except the first become half-width */
-        .publications .pub-buttons a + a {
-            flex: 1 1 calc(50% - 0.5rem);
-        }
-		header {
-            background-image: url('https://aditijc.github.io/images/header_large.png'); 
-			height: 100px;
-			top: 70%;
-		}
-
-        header h1 {
-            font-size: 1rem; /* Smaller font size for header */
-            left: 1rem;
-            top:1.4rem;
-        }
-
-        /* .profile-section img {
-            width: 90px; 
-            height: 90px;
-        } */
-
-		header img {
-            width: 120px; /* Further reduce avatar size */
-            height: 120px;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 0.08rem;
-            margin-top: 0.5rem; /* Reduced vertical spacing */
-			margin-bottom: 0.1rem; /* Reduced space below buttons */
-        }
-
-        .buttons a img {
-            width: 40px !important; /* Reduce button image size for mobile */
-            height: 40px !important;
-        }
-
-        .news-item, .project-item {
-            grid-template-columns: 1fr; /* Single column layout */
-        }
-    }
-    </style>
 </head>
 <body>
     <header>
-        <h1>
-			<!-- <a href="https://aditijc.github.io" target="_blank" rel="noopener noreferrer">
-            <b>Aditi</b> Chandrashekar
-			</a> -->
-            <b>Aditi</b> Chandrashekar
+        <h1 style=>
+            <strong>Aditi</strong> Chandrashekar
 		</h1>
-		<img src="https://aditijc.github.io/images/profile_pic.jpeg" alt="Aditi Chandrashekar">
-            <!-- <h2>Machine Learning Researcher</h2> -->
-            <!-- <h3>AI for Science</h3> -->
-            <!-- <p class="intro-text">Courant Institute of Mathematical Sciences, NYU</p> -->
-            <div class="buttons">
-                <a href="https://github.com/aditijc" target="_blank" title="GitHub">
-					<img src="https://aditijc.github.io/images/github_white.png" alt="GitHub Logo" style="width: 60px; height: 60px;">
-				</a>
-				<a href="mailto:ajc10180@nyu.edu" target="_blank" title="Email">
-					<img src="https://aditijc.github.io/images/email_white.png" alt="Email Icon" style="width: 60px; height: 60px;">
-				</a>
-				<a href="https://www.linkedin.com/in/aditi-chandrashekar-1042881b4/" target="_blank" title="LinkedIn">
-					<img src="https://aditijc.github.io/images/linkedin_white.png" alt="LinkedIn Logo" style="width: 60px; height: 60px;">
-				</a>
-                <a href="https://scholar.google.com/citations?user=SQkJvWsAAAAJ&hl=en&oi=ao" target="_blank" title="GoogleScholar">
-					<img src="https://aditijc.github.io/images/scholar_white.png" alt="Scholar Logo" style="width: 60px; height: 60px;">
-				</a>
-            </div>
-
-            
+  
     </header>
 
     <main>
-        <!-- Profile Section -->
-        <!-- <section class="profile-section">
-            <img src="https://aditijc.github.io/images/profile_pic.jpeg" alt="Aditi Chandrashekar">
-			<h2>AI for Science</h2>
-
-            <div class="buttons">
-                <a href="https://github.com/aditijc" target="_blank" title="GitHub">
-					<img src="https://aditijc.github.io/images/github.png" alt="GitHub Logo" style="width: 40px; height: 40px;">
-				</a>
-				<a href="mailto:ajchandr@caltech.edu" target="_blank" title="Email">
-					<img src="https://aditijc.github.io/images/email.png" alt="Email Icon" style="width: 40px; height: 40px;">
-				</a>
-				<a href="https://www.linkedin.com/in/aditi-chandrashekar-1042881b4/" target="_blank" title="LinkedIn">
-					<img src="https://aditijc.github.io/images/linkedin.png" alt="LinkedIn Logo" style="width: 40px; height: 40px;">
-				</a>
-            </div>
-        </section> -->
-
-        <!-- Bio Section -->
-        <section class="content-section publications">
-            <p class="intro-text">Courant Institute of Mathematical Sciences, NYU</p>
-            <p class="bio-text">
-                                <!-- In my ongoing senior thesis, I aim to solve inverse problems using robust equivariant learning in diffusion models.
-                My recent work at the Allen Institute for Brain Sciences involved leveraging lightweight transformer architectures 
-                to study Alzheimer's disease. I’ve also worked on improving functional ultrasound imaging using diffusion models, 
-                unrolled architectures, and neural operators for use in brain-machine interfaces. I have experience in fields from neuroscience to autonomous systems and explainable AI.  -->
-				<!-- Alongside my research, I’ve been a teaching assistant and tutor, and I’ve been recognized with several fellowships 
-                for my contributions.  -->
-				<!-- <br></br> -->
-                <!-- I am passionate about using machine learning to learn more about how the world works. -->
+        <section class="content-section profile-bio">
+            <div class="bio-text">
+                <hgroup><h1 style="font-size: 60px;font-weight: 500;" > <strong>Aditi</strong> Chandrashekar</h1>
+                    <h2 style="font-size: 25px">Courant Institute of Mathematical Sciences, NYU</h2></hgroup>
+                
+            <!-- <p class="intro-text">
+                Courant Institute of Mathematical Sciences, NYU
+            </p> -->
+            <p>
                 I am an incoming Ph.D. student in the Computer Science department at NYU’s Courant Institute of Mathematical Sciences. 
-				<!-- <strong>The following two questions drive many of my current research endeavors.</strong><br>
-                1. How can we build models that effectively capture the underlying dynamics of complex systems (like the brain)? <br>
-                2. How can these insights be used to enhance our models?<br>
-				My current interests include representation learning, inverse problems, generative AI, imaging, neuroscience, reinforcement learning, and cognition.
-				<br></br> -->
-
-				<!-- In my free time I enjoy listening to music and playing the guitar, bass clarinet, and piano. -->
-
                 In my time at Caltech, I am grateful to have been mentored by Professors  
                 and was fortunate to be mentored by <a href="https://btolooshams.github.io/index.html" target="_blank" rel="noopener noreferrer">Bahareh Tolooshams</a>, <a href="https://tensorlab.cms.caltech.edu/users/anima/" target="_blank" rel="noopener noreferrer">Anima Anandkumar</a>,
                 <a href="https://aerospacerobotics.caltech.edu/" target="_blank" rel="noopener noreferrer">Soon-Jo Chung</a>, 
@@ -484,8 +49,33 @@
                 My research seeks to understand and model the hidden dynamics of complex systems—particularly the brain—by combining representation learning, inverse-problem methodology, and generative AI. 
                 <br></br>
                 For more info, please find my CV <a href="https://aditijc.github.io/assets/CV_Aditi_Chandrashekar.pdf" target="_blank" rel="noopener noreferrer">here</a>.
+                
             </p>
-
+            </div>
+        
+            <div class="bio-right">
+            <img
+                src="https://aditijc.github.io/images/profile_pic.jpeg"
+                alt="Aditi Chandrashekar"
+                class="profile-photo"
+            />
+            <div class="buttons">
+                <a href="https://github.com/aditijc" title="GitHub">
+                    <img src="https://aditijc.github.io/images/github_white.png" alt="GitHub Logo" style="width: 60px; height: 60px;">
+                </a>
+                <a href="mailto:ajc10180@nyu.edu" title="Email">
+                    <img src="https://aditijc.github.io/images/email_white.png" alt="Email Icon" style="width: 60px; height: 60px;">
+                </a>
+                <a href="https://www.linkedin.com/in/aditi-chandrashekar-1042881b4/" title="LinkedIn">
+                    <img src="https://aditijc.github.io/images/linkedin_white.png" alt="LinkedIn Logo" style="width: 60px; height: 60px;">
+                </a>
+                <a href="https://scholar.google.com/citations?user=SQkJvWsAAAAJ&hl=en&oi=ao"  title="Scholar">
+                    <img src="https://aditijc.github.io/images/scholar_white.png" alt="Scholar Logo" style="width: 60px; height: 60px;">
+                </a>
+            </div>
+            </div>
+        </section>
+        <section class="content-section">
             <h2>News</h2>
             <div class="news-item">
                 <span>June 2025</span>
@@ -499,7 +89,8 @@
                 <span>Jan 2025</span>
                 <p>I'm applying to PhD Programs for admission in Fall 2025!</p>
             </div>
-
+        </section>
+        <section class="content-section publications">
             <h2>Selected Publications</h2>
             <div class="publications">
             <!-- <div class="publication">
@@ -633,6 +224,7 @@
             </div>
 
         </div>
+    </section>
                 <!-- <p><b>Multi-Modal Diffusion Models to Reconstruct Dark Matter Fields</b>
                 </br>
                 Aditi Chandrashekar, Saumya Chauhan, Eshani Patel, Maria Vazhaeparambil
@@ -699,7 +291,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 Aditi Chandrashekar. All rights reserved.</p>
+        <p style="color: #a82500;">&copy; 2025 Aditi Chandrashekar. All rights reserved.</p>
     </footer>
 </body>
 </html>

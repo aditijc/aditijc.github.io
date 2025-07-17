@@ -1,0 +1,289 @@
+/* styles.css */
+
+  body {
+    font-family: 'Poppins';
+    background-color: #1e1e1e;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
+
+  /* Publications */
+  .publications .publication {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
+  .publications .pub-image {
+    flex: 0 0 170px;
+    margin: 0;
+  }
+  .publications .pub-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  .publications .pub-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .publications .authors,
+  .publications .venue {
+    margin: 0.25rem 0;
+    line-height: 1.4;
+  }
+  .publications a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  /* Header */
+  header {
+    width: 100%;
+    height: 30px;
+    background-color: #1e1e1e;
+    background-image: url('https://aditijc.github.io/images/header.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    position: relative;
+    text-align: center;
+    margin: 0;
+  }
+  header h1 {
+    font-family: 'Poppins';
+    font-size: 1.5rem;
+    font-weight: normal;
+    color: #fff;
+    text-align: left;
+    position: absolute;
+    top:30%;
+    left: 2rem;
+    transform: translateY(-50%);
+    margin: 0;
+  }
+  /* header img {
+    width: 300px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  } */
+  /* header h2 {
+    font-size: 1.75rem;
+    font-weight: normal;
+    margin-top: 0.75rem;
+    color: #a82500;
+  }
+  header h3 {
+    font-size: 1.75rem;
+    font-weight: normal;
+    margin-top: 0.75rem;
+    color: #fff;
+  } */
+
+  /* Buttons (shared) */
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+  }
+  .buttons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+  }
+
+  /* Content Sections */
+  .content-section {
+    margin: 3rem 15rem;
+    padding: 0;
+  }
+  .content-section h2 {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    font-weight: 400;
+    color: rgb(184, 30, 3);
+  }
+  .content-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    font-weight: 400;
+    color: #fff;
+  }
+  .content-section p {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: #fff;
+  }
+  .intro-text {
+    font-style: italic;
+    font-size: 1.1rem !important;
+    font-weight: 400 !important;
+    margin-bottom: 1rem;
+    /* text-align: center; */
+  }
+  .bio-text {
+    text-align: left;
+    margin-bottom: 0;
+  }
+
+  /* News / Projects */
+  .news-item, .project-item {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    align-items: left;
+    margin-bottom: .5rem;
+  }
+  .news-item span, .project-item span {
+    font-weight: bold;
+    color: #fff;
+  }
+  .news-item p, .project-item p {
+    margin: 0;
+    padding-left: 0.5rem;
+  }
+
+  /* Footer */
+  footer {
+    width: 100%;
+    height: 150px;
+    background: #292929;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #fff;
+  }
+
+  /* Links */
+  a {
+    color: #bc5100 !important;
+    text-decoration: none;
+  }
+  a:hover {
+    color: rgb(235, 153, 0) !important;
+    text-decoration: underline;
+  }
+  a:visited {
+    color: rgb(182, 28, 1) !important;
+  }
+
+  /* ——— New: Bio + Photo Layout ——— */
+  .profile-bio {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin: 3rem 15rem;
+  }
+  .profile-bio .bio-text {
+    flex: 1;
+  }
+  .profile-bio .bio-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 auto;
+  }
+  .profile-photo {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  /* ensure buttons under photo keep their spacing */
+  .profile-bio .buttons {
+    margin-top: 1rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 1000px) {
+    .content-section {
+      margin: 2.5rem 2.5rem;
+    }
+    header img {
+      width: 190px;
+      height: 190px;
+      margin-top: 1rem;
+    }
+    header h1, header h2, header h3 {
+      font-size: 1.2rem;
+    }
+    .news-item, .project-item {
+      grid-template-columns: 1fr;
+    }
+    .buttons a img {
+      width: 60px;
+      height: 60px;
+    }
+    /* stack bio and photo vertically on tablet */
+    .profile-bio {
+      flex-direction: column-reverse;
+      text-align: center;
+      margin: 2.5rem 2.5rem;
+    }
+    .profile-bio .buttons {
+      margin-top: 0.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    body {
+      font-family: 'Lato', sans-serif;
+    }
+    .content-section {
+      margin: 9rem 1rem;
+    }
+    .publications .publication {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      margin-bottom: 2rem;
+    }
+    .publications .pub-image {
+      width: 100%;
+      margin: 0 0 1rem;
+    }
+    .publications .pub-image img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    header {
+      background-image: url('https://aditijc.github.io/images/header_large.png');
+      height: 100px;
+    }
+    header h1 {
+      font-size: 1rem;
+      left: 1rem;
+      top: 1.4rem;
+    }
+    header img {
+      width: 120px;
+      height: 120px;
+    }
+    .buttons {
+      gap: 0.08rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.1rem;
+    }
+    .buttons a img {
+      width: 40px !important;
+      height: 40px !important;
+    }
+    .news-item, .project-item {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  
