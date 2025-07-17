@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aditi Chandrashekar</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+    }
+    h2{
+      color: rgb(184, 30, 3);
+      margin: 0.25em 0;
+      font-size: 3rem;
+    }
+    h3 {
+      color: rgb(184, 30, 3);
+      margin: 0.25em 0;
+      font-size: 1rem;
+      font-weight: 100;
+    }
+    nav, footer {
+      background-color: #292929;
+
+      margin: 0;
+    }
+    a {
+      color: rgb(184, 30, 3);
+    }
+    button {
+      background-color: #9d4edd00;
+      color: white;
+      border: none;
+      padding: 0.5em 1em;
+      margin: 0.5em auto;
+      display: block;
+      cursor: pointer;
+    }
+
+    /* two‑column grid: left for intro, right for background */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      align-items: start;
+      margin-top: 2rem;
+    }
+
+    /* left column styling */
+    .intro {
+      text-align: center;
+    }
+    .intro img {
+      width: 250px;
+      height: auto;
+      object-fit: cover;
+      border-radius: 10px;
+      margin: 1rem auto;
+      display: block;
+    }
+
+    /* right column text */
+    .background h3 {
+      margin-top: 1.5rem;
+    }
+
+    /* LIFT the figure up */
+    figure.intro {
+      margin-top: -1.5rem;
+    }
+
+    /* make buttons small, circular & inline */
+    figure.intro button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin: 0.25em;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="container-fluid">
+    <ul><li><strong>Aditi Chandrashekar</strong></li></ul>
+    <ul>
+      <li><a href="index.html">About</a></li>
+      <!-- <li><a href="research.html">Research</a></li>
+      <li><a href="consulting.html">Consulting</a></li>
+      <li><a href="blog.html">Blog</a></li> -->
+    </ul>
+  </nav>
+
+  <main class="container">
+      <section>
+        <hgroup>
+        <h2>Aditi Chandrashekar</h2>
+        <h3>Courant Institute of Mathematical Sciences, NYU</h3>
+        </hgroup>
+
+        <!-- floating profile + circular buttons -->
+        <figure class="intro" style="float: right; width: 250px; margin-left: 2rem; margin-bottom: 1rem;">
+          <img src="assets/profile_pic.jpeg">
+          <!-- <figcaption><small>Profile Image</small></figcaption> -->
+          <button onclick="location.href='mailto:narayann@email.gwu.edu'"><img src="assets/email_pur.png" alt="email"></button>
+          <button onclick="location.href='https://www.linkedin.com/in/nirmalanarayan/'"><img src="assets/linkedin_pur.png" alt="💼"></button>
+          <button onclick="location.href='https://www.instagram.com/nirmynarayan/'"><img src="assets/insta_pur.png" alt="📸"></button>
+          <!-- <button onclick="location.href='https://www.instagram.com/nirmynarayan/'"><img src="assets/insta_pur.png" alt="📸"></button> -->
+          <!-- <button onclick="window.open('https://linkedin.com/','_blank')">💼</button>
+          <button onclick="window.open('https://twitter.com/','_blank')">🐦</button> -->
+        </figure>
+
+        <p>
+          Born in India and raised in British Hong Kong, I experientially understand the significance of my
+          dissertation, <em>Written into Representation: The South Asian Girl in Cultural Texts</em>. I earned
+          my PhD in Education at George Washington University, and I also hold an MBA, a master’s in Marketing
+          and Finance, and a master’s in Education. Before my PhD, I spent twenty years in Philadelphia
+          working in university administration and as a middle‑school English teacher. Combining elements of
+          my diverse background, my work explores how representations influence the ways a new generation of
+          South Asian girls construct their social and cultural identities.
+        </p>
+        <p>
+          Now, I have moved back to India and serve as Co‑PI of the [lab name, etc.] and am sharing my expertise through consulting.
+          For more on my research see my [cv]. I am always open to new collaborations. For research inquiries
+          please see [contact]. If you would like to explore dissertation coaching, please check out my blog
+          and consulting page and reach out if there is a good fit!
+        </p>
+      </section>
+  </main>
+
+
+</body>
+<footer class="container-fluid">
+    <small>2025 Aditi Chandrashekar. All rights reserved.</small>
+  </footer>
+</html>
