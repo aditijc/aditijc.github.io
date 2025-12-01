@@ -68,6 +68,23 @@
     transform: translateY(-50%);
     margin: 0;
   }
+
+  .header-actions {
+    display: none;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .header-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+  }
+  .header-actions img {
+    width: 60%;
+    height: auto;
+  }
   /* header img {
     width: 300px;
     height: 50px;
@@ -210,79 +227,106 @@
     .content-section {
       margin: 2.5rem 2.5rem;
     }
-    header img {
-      width: 190px;
-      height: 190px;
-      margin-top: 1rem;
-    }
-    header h1, header h2, header h3 {
-      font-size: 1.2rem;
-    }
     .news-item, .project-item {
       grid-template-columns: 1fr;
     }
-    .buttons a img {
-      width: 60px;
-      height: 60px;
-    }
     /* stack bio and photo vertically on tablet */
     .profile-bio {
-      flex-direction: column-reverse;
-      text-align: center;
+      flex-direction: column;
+      gap: 1.5rem;
       margin: 2.5rem 2.5rem;
     }
+    .profile-bio .bio-right {
+      width: 100%;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 720px) {
+    header {
+      height: auto;
+      background-image: none;
+      padding: 0.9rem 1rem 0.6rem;
+    }
+    header h1 {
+      display: none;
+    }
+    .header-actions {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.3rem;
+    }
+    .header-actions a {
+      width: 70px;
+      height: 70px;
+    }
+    .header-actions img {
+      width: 60% !important;
+      height: auto !important;
+    }
+    main {
+      padding: 0 1.25rem 1.8rem;
+    }
+    .content-section {
+      margin: 1.25rem 1.25rem;
+    }
+    .profile-bio {
+      margin: 0.35rem 1.25rem 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .profile-bio .bio-text {
+      text-align: left;
+    }
+    .profile-bio .bio-text h1 {
+      font-size: clamp(2.2rem, 8vw, 2.8rem) !important;
+      line-height: 1.15;
+    }
+    .profile-bio .bio-text h2 {
+      font-size: 1.05rem !important;
+      text-transform: none;
+      margin-top: 0.35rem;
+    }
+    .profile-bio .bio-right {
+      width: 100%;
+      align-items: flex-start;
+    }
+    .profile-photo {
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgb(0 0 0 / 0.35);
+      order: -1;
+      margin-bottom: 0.5rem;
+    }
     .profile-bio .buttons {
-      margin-top: 0.75rem;
+      display: none;
     }
   }
 
   @media (max-width: 480px) {
-    body {
-      font-family: 'Lato', sans-serif;
-    }
     .content-section {
-      margin: 9rem 1rem;
+      margin: 1.25rem 1rem;
     }
     .publications .publication {
-      display: flex;
       flex-direction: column;
       align-items: stretch;
-      margin-bottom: 2rem;
     }
     .publications .pub-image {
       width: 100%;
       margin: 0 0 1rem;
     }
-    .publications .pub-image img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      border-radius: 4px;
+    .profile-photo {
+      max-width: 240px;
+      border-radius: 20px;
     }
-    header {
-      background-image: url('https://aditijc.github.io/images/header_large.png');
-      height: 100px;
-    }
-    header h1 {
-      font-size: 1rem;
-      left: 1rem;
-      top: 1.4rem;
-    }
-    header img {
-      width: 120px;
-      height: 120px;
-    }
-    .buttons {
-      gap: 0.08rem;
-      margin-top: 0.5rem;
-      margin-bottom: 0.1rem;
-    }
-    .buttons a img {
-      width: 40px !important;
-      height: 40px !important;
-    }
-    .news-item, .project-item {
-      grid-template-columns: 1fr;
+    .profile-bio .buttons a {
+      width: 40px;
+      height: 40px;
     }
   }
 
