@@ -258,23 +258,24 @@
       background-image: none;
       padding: 0.9rem 1rem 0.6rem;
     }
+    header {
+      padding: 0.75rem 1.25rem 0.75rem;
+    }
     header h1 {
-      display: none;
+      display: block;
+      position: static;
+      transform: none;
+      font-size: clamp(1.8rem, 6vw, 2.4rem);
+      font-weight: 500;
+      text-align: left;
+      margin: 0;
+      padding-left: 0.75rem;
     }
     .header-actions {
-      display: flex;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.3rem;
+      display: none;
     }
-    .header-actions a {
-      width: 70px;
-      height: 70px;
-    }
-    .header-actions img {
-      width: 60% !important;
-      height: auto !important;
+    .profile-bio hgroup {
+      display: none;
     }
     main {
       padding: 0 1.25rem 1.8rem;
@@ -292,7 +293,6 @@
       text-align: left;
     }
     .profile-bio h1 {
-      font-size: clamp(1.1rem, 4vw, 1.4rem) !important;
       line-height: 1.15;
     }
     .profile-bio h2 {
@@ -302,7 +302,7 @@
     }
     .profile-bio .bio-right {
       width: 100%;
-      align-items: flex-start;
+      align-items: center;
     }
     .profile-photo {
       width: 100%;
@@ -314,7 +314,24 @@
       margin-bottom: 0.5rem;
     }
     .profile-bio .buttons {
-      display: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0.5rem;
+      gap: 0.25rem;
+    }
+    .profile-bio .buttons a {
+      width: 50px;
+      height: 50px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .profile-bio .buttons a img {
+      width: 60% !important;
+      height: auto !important;
     }
   }
 
