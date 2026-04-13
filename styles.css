@@ -2,6 +2,7 @@
 
   h1, h2, h3 {
     font-family: 'Lora', Georgia, serif;
+    color: #fff8f4;
   }
 
   body {
@@ -294,6 +295,7 @@
     }
     .profile-bio h1 {
       line-height: 1.15;
+      color: #fff8f4 !important;
     }
     .profile-bio h2 {
       font-size: 1.05rem !important;
