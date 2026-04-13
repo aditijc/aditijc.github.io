@@ -1,5 +1,9 @@
 /* styles.css */
 
+  h1, h2, h3 {
+    font-family: 'Lora', Georgia, serif;
+  }
+
   body {
     font-family: 'Poppins';
     background-color: #1e1e1e;
@@ -57,7 +61,6 @@
     margin: 0;
   }
   header h1 {
-    font-family: 'Poppins';
     font-size: 1.5rem;
     font-weight: normal;
     color: #fff;
@@ -127,7 +130,6 @@
   }
   .content-section h2 {
     font-size: 1.5rem;
-    text-transform: uppercase;
     margin-bottom: 0.25rem;
     font-weight: 400;
     color: rgb(184, 30, 3);
