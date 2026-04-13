@@ -291,11 +291,11 @@
     .profile-bio .bio-text {
       text-align: left;
     }
-    .profile-bio .bio-text h1 {
+    .profile-bio h1 {
       font-size: clamp(1.1rem, 4vw, 1.4rem) !important;
       line-height: 1.15;
     }
-    .profile-bio .bio-text h2 {
+    .profile-bio h2 {
       font-size: 1.05rem !important;
       text-transform: none;
       margin-top: 0.35rem;
