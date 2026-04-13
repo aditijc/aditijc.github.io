@@ -4,10 +4,6 @@
     font-family: 'Lora', Georgia, serif;
   }
 
-  html {
-    filter: sepia(0.12);
-  }
-
   body {
     font-family: 'Poppins';
     background: transparent;
