@@ -165,6 +165,7 @@
     margin-bottom: .5rem;
   }
   .news-item span, .project-item span {
+    font-family: 'Lora', Georgia, serif;
     font-weight: bold;
     color: #fff;
   }
