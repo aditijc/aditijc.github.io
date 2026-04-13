@@ -6,11 +6,23 @@
 
   body {
     font-family: 'Poppins';
-    background-color: #1e1e1e;
-    color: #ffffff;
+    background: transparent;
+    color: #fff8f4;
     margin: 0;
     padding: 0;
     line-height: 1.6;
+    position: relative;
+    filter: sepia(0.12);
+  }
+
+  #particle-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
   }
 
   /* Publications */
@@ -51,7 +63,7 @@
   header {
     width: 100%;
     height: 30px;
-    background-color: #1e1e1e;
+    background-color: transparent;
     background-image: url('https://aditijc.github.io/images/header.png');
     background-size: cover;
     background-repeat: no-repeat;
@@ -63,7 +75,7 @@
   header h1 {
     font-size: 1.5rem;
     font-weight: normal;
-    color: #fff;
+    color: #fff8f4;
     text-align: left;
     position: absolute;
     top:30%;
@@ -104,7 +116,7 @@
     font-size: 1.75rem;
     font-weight: normal;
     margin-top: 0.75rem;
-    color: #fff;
+    color: #fff8f4;
   } */
 
   /* Buttons (shared) */
@@ -138,12 +150,12 @@
     font-size: 1.1rem;
     margin-bottom: 0.25rem;
     font-weight: 400;
-    color: #fff;
+    color: #fff8f4;
   }
   .content-section p {
     font-size: 0.9rem;
     font-weight: 300;
-    color: #fff;
+    color: #fff8f4;
   }
   .intro-text {
     font-style: italic;
@@ -167,7 +179,7 @@
   .news-item span, .project-item span {
     font-family: 'Lora', Georgia, serif;
     font-weight: bold;
-    color: #fff;
+    color: #fff8f4;
   }
   .news-item p, .project-item p {
     margin: 0;
@@ -178,11 +190,11 @@
   footer {
     width: 100%;
     height: 150px;
-    background: #292929;
+    background: #272220;
     text-align: center;
     padding: 1rem;
     font-size: 0.9rem;
-    color: #fff;
+    color: #fff8f4;
   }
 
   /* Links */
@@ -200,23 +212,24 @@
 
   /* ——— New: Bio + Photo Layout ——— */
   .profile-bio {
-    display: flex;
-    align-items: flex-start;
-    gap: 2rem;
     margin: 3rem 15rem;
+    overflow: hidden;
   }
-  .profile-bio .bio-text {
-    flex: 1;
+  .profile-bio::after {
+    content: '';
+    display: block;
+    clear: both;
   }
   .profile-bio .bio-right {
+    float: right;
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex: 0 0 auto;
+    margin: 0 0 1.5rem 2.5rem;
   }
   .profile-photo {
-    width: 300px;
-    height: 300px;
+    width: 280px;
+    height: 280px;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -233,15 +246,11 @@
     .news-item, .project-item {
       grid-template-columns: 1fr;
     }
-    /* stack bio and photo vertically on tablet */
     .profile-bio {
-      flex-direction: column;
-      gap: 1.5rem;
       margin: 2.5rem 2.5rem;
     }
     .profile-bio .bio-right {
-      width: 100%;
-      align-items: center;
+      margin: 0 0 1rem 1.5rem;
     }
   }
 

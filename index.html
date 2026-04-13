@@ -31,6 +31,7 @@
     <link rel="icon" href="/images/icon.png" sizes="32x32" type="image/png">
 </head>
 <body>
+    <canvas id="particle-canvas"></canvas>
     <header>
         <h1>
             <strong>Aditi</strong> Chandrashekar
@@ -53,31 +54,8 @@
 
     <main>
         <section class="content-section profile-bio">
-            <div class="bio-text">
-                <hgroup><h1 style="font-size: 60px;font-weight: 500;" > <strong>Aditi</strong> Chandrashekar</h1>
-                    <h2 style="font-size: 25px">Courant Institute, NYU</h2></hgroup>
-                
-            <!-- <p class="intro-text">
-                Courant Institute of Mathematical Sciences, NYU
-            </p> -->
-            <p>
-                I am a first-year Ph.D. student in CILVR at NYU Courant, advised by Professors 
-                <a href="https://www.cns.nyu.edu/~eero/" target="_blank" rel="noopener noreferrer"> Eero Simoncelli</a>, 
-                <a href="https://kyunghyuncho.me/" target="_blank" rel="noopener noreferrer"> Kyunghyun Cho</a>, and 
-                <a href="https://cs.nyu.edu/~fergus/pmwiki/pmwiki.php" target="_blank" rel="noopener noreferrer"> Rob Fergus</a>. 
-                In my time at <a href="https://www.caltech.edu/" target="_blank" rel="noopener noreferrer">Caltech</a> I am grateful to have been mentored by Professors  
-                 <a href="https://btolooshams.github.io/index.html" target="_blank" rel="noopener noreferrer">Bahareh Tolooshams</a>, <a href="https://tensorlab.cms.caltech.edu/users/anima/" target="_blank" rel="noopener noreferrer">Anima Anandkumar</a>,
-                <a href="https://aerospacerobotics.caltech.edu/" target="_blank" rel="noopener noreferrer">Soon-Jo Chung</a>, 
-                and <a href="https://users.cms.caltech.edu/~klbouman/" target="_blank" rel="noopener noreferrer">Katie Bouman</a>.
-
-                <br></br>
-                My research seeks to understand and model the hidden dynamics of complex systems—particularly the brain—by combining representation learning, inverse-problem methodology, and generative AI. 
-                <br></br>
-                For more info, please find my CV <a href="https://aditijc.github.io/assets/CV_Aditi_Chandrashekar.pdf" target="_blank" rel="noopener noreferrer">here</a>.
-                
-            </p>
-            </div>
-        
+            <hgroup><h1 style="font-size: 60px;font-weight: 500;"><strong>Aditi</strong> Chandrashekar</h1>
+                <h2 style="font-size: 25px">Courant Institute, NYU</h2></hgroup>
             <div class="bio-right">
             <img
                 src="https://aditijc.github.io/images/profile_pic.jpeg"
@@ -99,7 +77,25 @@
                 </a>
             </div>
             </div>
+            <p>
+                I am a first-year Ph.D. student in CILVR at NYU Courant, advised by Professors
+                <a href="https://www.cns.nyu.edu/~eero/" target="_blank" rel="noopener noreferrer"> Eero Simoncelli</a>,
+                <a href="https://kyunghyuncho.me/" target="_blank" rel="noopener noreferrer"> Kyunghyun Cho</a>, and
+                <a href="https://cs.nyu.edu/~fergus/pmwiki/pmwiki.php" target="_blank" rel="noopener noreferrer"> Rob Fergus</a>.
+                I am grateful for the mentorship of Professors
+                 <a href="https://btolooshams.github.io/index.html" target="_blank" rel="noopener noreferrer">Bahareh Tolooshams</a>, <a href="https://tensorlab.cms.caltech.edu/users/anima/" target="_blank" rel="noopener noreferrer">Anima Anandkumar</a>,
+                <a href="https://aerospacerobotics.caltech.edu/" target="_blank" rel="noopener noreferrer">Soon-Jo Chung</a>,
+                and <a href="https://users.cms.caltech.edu/~klbouman/" target="_blank" rel="noopener noreferrer">Katie Bouman</a> during my time at Caltech.
+            </p>
+            <p>My research focuses on prediction and generative modeling,
+                with an emphasis on physical plausibility. I am motivated by
+                questions at the intersection of AI, neuroscience, and vision.</p>
+            <p>For more info, please find my CV <a href="https://aditijc.github.io/assets/CV_Aditi_Chandrashekar.pdf" target="_blank" rel="noopener noreferrer">here</a>.</p>
         </section>
+        <!-- <section class="content-section">
+            <p>My research seeks to understand and model the hidden dynamics of complex systems—particularly the brain—by combining representation learning, inverse-problem methodology, and generative AI.</p>
+            <p>For more info, please find my CV <a href="https://aditijc.github.io/assets/CV_Aditi_Chandrashekar.pdf" target="_blank" rel="noopener noreferrer">here</a>.</p>
+        </section> -->
         <section class="content-section">
             <h2>News</h2>
 			<div class="news-item">
@@ -120,7 +116,7 @@
             </div> -->
         </section>
         <section class="content-section publications">
-            <h2>Selected Publications</h2>
+            <h2>Publications</h2>
             <div class="publications">
             <!-- <div class="publication">
               <div class="pub-image">
@@ -196,9 +192,9 @@
               <div class="pub-details">
                 <h3>Multi-Modal Diffusion Models to Reconstruct Dark Matter Fields</h3>
                 <p class="authors">
-                    <b>Aditi Chandrashekar</b>, Saumya Chauhan, Eshani Patel, Maria Vazhaeparambil</p>
+                    <b>Aditi Chandrashekar*</b>, Saumya Chauhan*, Eshani Patel*, Maria Vazhaeparambil*</p>
                 <p class="venue">
-                  <em>AAAI — AI2ASE Workshop, 2026</em>  
+                  <em>AI2ASE Workshop at AAAI, 2026</em>  
                   [<a href="https://github.com/epatel16/Dark-Matter-Diffusion" target="_blank">code</a>]
                 </p>
               </div>
@@ -225,7 +221,7 @@
                 <img src="images/thumbs/indy-thumbnail.png" alt="INDY paper thumbnail">
                 </div>
                 <div class="pub-details">
-                <h3>Building a Testbed for Motion Planning and Control Algorithms on a Modified RC car</h3>
+                <h3>A Testbed for Motion Planning and Control Algorithms on a Modified RC car</h3>
                 <p class="authors">
                     <b>Aditi Chandrashekar</b>, John Lathrop, Ben Riviere, Soon-Jo Chung
                 </p>
@@ -322,5 +318,95 @@
     <footer>
         <p style="color: #a82500;">&copy; 2025 Aditi Chandrashekar. All rights reserved.</p>
     </footer>
+    <script>
+    (function () {
+        var canvas = document.getElementById('particle-canvas');
+        var ctx = canvas.getContext('2d');
+        var COUNT = 100, MAX_DIST = 130, MOUSE_DIST = 180;
+        var particles = [];
+        var mouse = { x: null, y: null };
+
+        window.addEventListener('mousemove', function (e) {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseleave', function () {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = document.body.scrollHeight;
+        }
+
+        function Particle() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 0.35;
+            this.vy = (Math.random() - 0.5) * 0.35;
+            this.r = Math.random() * 1.65 + 0.55;
+        }
+
+        function init() {
+            resize();
+            particles = [];
+            for (var i = 0; i < COUNT; i++) particles.push(new Particle());
+        }
+
+        function draw() {
+            ctx.fillStyle = '#201d1b';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (var i = 0; i < particles.length; i++) {
+                var p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                // particle–particle connections
+                for (var j = i + 1; j < particles.length; j++) {
+                    var q = particles[j];
+                    var dx = p.x - q.x, dy = p.y - q.y;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < MAX_DIST) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(q.x, q.y);
+                        ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - dist / MAX_DIST) * 0.2) + ')';
+                        ctx.lineWidth = 0.6;
+                        ctx.stroke();
+                    }
+                }
+
+                // mouse–particle connections
+                if (mouse.x !== null) {
+                    var mdx = p.x - mouse.x, mdy = p.y - mouse.y;
+                    var mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                    if (mdist < MOUSE_DIST) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - mdist / MOUSE_DIST) * 0.4) + ')';
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.55)';
+                ctx.fill();
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        draw();
+    }());
+    </script>
 </body>
 </html>
