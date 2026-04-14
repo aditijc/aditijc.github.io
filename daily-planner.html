@@ -3,50 +3,96 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-    href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&family=Poppins:wght@300;400;700&display=swap"
-    rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,700;1,400&family=Poppins:wght@300;400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Thoughts – Aditi Chandrashekar</title>
+    <title>Daily Planner – Aditi Chandrashekar</title>
     <meta name="author" content="Aditi Chandrashekar">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="/images/icon_dark.png" sizes="32x32" type="image/png">
     <style>
-        .content-section ul {
-            list-style: none;
-            padding-left: 0;
+        #root {
+            padding: 2rem 1rem 4rem;
         }
-        .content-section ul p {
-            margin-bottom: 1.25rem;
+        @media (max-width: 700px) {
+            .planner-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
     </style>
 </head>
 <body>
     <canvas id="particle-canvas"></canvas>
     <header>
-        <h1>
-            <strong>Aditi</strong> Chandrashekar
-        </h1>
+        <h1 id="header-clock"></h1>
         <a class="bird-link" href="index.html" title="Home" aria-label="Home"></a>
     </header>
+    <script>
+        (function () {
+            window.stressMode = false;
+            function tick() {
+                const opts = window.stressMode
+                    ? { hour: '2-digit', minute: '2-digit', second: '2-digit' }
+                    : { hour: '2-digit', minute: '2-digit' };
+                document.getElementById('header-clock').textContent =
+                    new Date().toLocaleTimeString([], opts);
+            }
+            tick();
+            setInterval(tick, 1000);
+        })();
+    </script>
 
-    <main>
-        <section class="content-section">
-            <h2>other potentially interesting things</h2>
-            <ul>
-                <p>— I love music. I play guitar, bass clarinet, and most woodwinds. I'm looking for opportunities to perform, so if you have one or would like to play together, <a href="mailto:ajc10180@nyu.edu">reach out!</a></p>
-                <p>— Find me on <a href="https://open.spotify.com/user/aditijc?si=0a308c020546401e" target="_blank" rel="noopener noreferrer">Spotify</a>.</p>
-                <p>— Use this <a href="daily-planner.html">daily planner</a> Claude made me to plan your day.</p>
-            </ul>
-        </section>
-    </main>
+    <div id="root"></div>
 
-    <!-- <footer>
-        <p style="color: rgb(184, 30, 3);">&copy; 2026 Aditi Chandrashekar. All rights reserved.</p>
-    </footer> -->
+    <!-- React + ReactDOM UMD -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel standalone for JSX transform -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script>
+        (async () => {
+            const src = await fetch('./daily-planner.jsx', { cache: 'no-store' }).then(r => r.text());
+            const patched = src
+                // Replace React import with globals
+                .replace(/^import\s+\{[^}]+\}\s+from\s+["']react["'];?\s*/m,
+                    'const { useState, useCallback, useEffect, useRef } = React;\n')
+                // Strip export default
+                .replace(/^export\s+default\s+/m, '')
+                // Dark theme: semi-transparent red cards, white text
+                .replace(
+                    /const P = \{[\s\S]*?\};/,
+                    `const P = {
+  bg: "transparent", card: "rgba(148, 22, 4, 0.38)", accent: "#D4764E",
+  accentLight: "rgba(212,118,78,0.3)", accentDark: "#E8956D",
+  text: "#fff8f4", textMuted: "rgba(255,248,244,0.55)", border: "rgba(255,248,244,0.18)",
+  taskBg: "rgba(120, 18, 3, 0.35)", gridEmpty: "rgba(255,248,244,0.1)",
+  gridFilled: "#D4764E", gridPast: "rgba(255,248,244,0.05)",
+};`
+                )
+                // Dark priority colours
+                .replace(
+                    /const PRIORITY_COLORS = \{[\s\S]*?\};/,
+                    `const PRIORITY_COLORS = {
+  high:   { bg: "rgba(217,79,79,0.18)",   dot: "#D94F4F", label: "High" },
+  medium: { bg: "rgba(230,168,48,0.18)",  dot: "#E6A830", label: "Med"  },
+  low:    { bg: "rgba(76,175,118,0.18)",  dot: "#4CAF76", label: "Low"  },
+};`
+                )
+                // Past-filled grid slot colour
+                .replace(/"#C4A08A"/g, '"rgba(212,118,78,0.5)"')
+                // Unscheduled-tasks banner
+                .replace(/"#FFF5F5"/g, '"rgba(148,22,4,0.4)"')
+                .replace(/"1px solid #F0D0D0"/g, '"1px solid rgba(255,248,244,0.18)"')
+                .replace(/"#C0392B"/g, '"rgba(255,248,244,0.8)"');
+
+            const transformed = Babel.transform(patched, { presets: ['react'] }).code;
+            const code = transformed + '\nReactDOM.createRoot(document.getElementById("root")).render(React.createElement(DailyPlanner));';
+            // eslint-disable-next-line no-eval
+            eval(code);
+        })();
+    </script>
 
     <script>
     (function () {
@@ -90,9 +136,7 @@
             });
         }
 
-        window.addEventListener('resize', function () {
-            resize();
-        });
+        window.addEventListener('resize', function () { resize(); });
 
         function draw() {
             ctx.clearRect(0, 0, W, H);
