@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+    href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&family=Poppins:wght@300;400;700&display=swap"
+    rel="stylesheet"
+    />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thoughts – Aditi Chandrashekar</title>
+    <meta name="author" content="Aditi Chandrashekar">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="/images/icon_dark.png" sizes="32x32" type="image/png">
+    <style>
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .content-section ul p {
+            margin-bottom: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+    <header>
+        <h1>
+            <strong>Aditi</strong> Chandrashekar
+        </h1>
+        <a class="bird-link" href="index.html" title="Home" aria-label="Home"></a>
+    </header>
+
+    <main>
+        <section class="content-section">
+            <h2>other potentially interesting things</h2>
+            <ul>
+                <p>— I love music. I play guitar, bass clarinet, and most woodwinds. I'm looking for opportunities to perform, so if you have one or would like to play together, <a href="mailto:ajc10180@nyu.edu">reach out!</a></p>
+                <p>— Find me on <a href="https://open.spotify.com/user/aditijc?si=0a308c020546401e" target="_blank" rel="noopener noreferrer">Spotify</a>.</p>
+            </ul>
+        </section>
+    </main>
+
+    <!-- <footer>
+        <p style="color: rgb(184, 30, 3);">&copy; 2026 Aditi Chandrashekar. All rights reserved.</p>
+    </footer> -->
+
+    <script>
+    (function () {
+        var canvas = document.getElementById('particle-canvas');
+        var ctx = canvas.getContext('2d');
+        var W, H, particles;
+        var mouse = { x: null, y: null };
+        var mobile = window.innerWidth <= 768;
+        var COUNT = mobile ? 35 : 100;
+        var MAX_DIST = mobile ? 100 : 130;
+
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+        }
+
+        function init() {
+            resize();
+            particles = [];
+            for (var i = 0; i < COUNT; i++) {
+                particles.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    r: mobile
+                        ? Math.random() * 0.8 + 0.4
+                        : Math.random() * 1.65 + 0.55
+                });
+            }
+        }
+
+        if (!mobile) {
+            window.addEventListener('mousemove', function (e) {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
+            window.addEventListener('mouseleave', function () {
+                mouse.x = null;
+                mouse.y = null;
+            });
+        }
+
+        window.addEventListener('resize', function () {
+            resize();
+        });
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = '#201d1b';
+            ctx.fillRect(0, 0, W, H);
+
+            for (var i = 0; i < particles.length; i++) {
+                var p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > W) p.vx *= -1;
+                if (p.y < 0 || p.y > H) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,248,244,0.85)';
+                ctx.fill();
+
+                for (var j = i + 1; j < particles.length; j++) {
+                    var q = particles[j];
+                    var dx = p.x - q.x, dy = p.y - q.y;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < MAX_DIST) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(q.x, q.y);
+                        ctx.strokeStyle = 'rgba(255,248,244,' + (1 - dist / MAX_DIST) * 0.35 + ')';
+                        ctx.lineWidth = 0.6;
+                        ctx.stroke();
+                    }
+                }
+
+                if (!mobile && mouse.x !== null) {
+                    var mdx = p.x - mouse.x, mdy = p.y - mouse.y;
+                    var mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                    if (mdist < MAX_DIST) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.strokeStyle = 'rgba(255,248,244,' + (1 - mdist / MAX_DIST) * 0.5 + ')';
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+
+        init();
+        draw();
+    })();
+    </script>
+</body>
+</html>

@@ -10,7 +10,7 @@
     background: transparent;
     color: #fff8f4;
     margin: 0;
-    padding: 0;
+    padding-top: 0;
     line-height: 1.6;
   }
 
@@ -61,8 +61,8 @@
   /* Header */
   header {
     width: 100%;
-    height: 30px;
-    background-color: transparent;
+    height: 70px;
+    background-color: rgba(32, 29, 27, 0.72);
     background-image: url('https://aditijc.github.io/images/header.png');
     background-size: cover;
     background-repeat: no-repeat;
@@ -77,10 +77,21 @@
     color: #fff8f4;
     text-align: left;
     position: absolute;
-    top:30%;
+    top: 50%;
     left: 2rem;
     transform: translateY(-50%);
     margin: 0;
+  }
+
+  /* Clickable bird area in header */
+  .bird-link {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 70px;
+    height: 40%;
+    cursor: pointer;
+    display: block;
   }
 
   .header-actions {
@@ -257,9 +268,6 @@
     header {
       height: auto;
       background-image: none;
-      padding: 0.9rem 1rem 0.6rem;
-    }
-    header {
       padding: 0.75rem 1.25rem 0.75rem;
     }
     header h1 {
@@ -273,6 +281,9 @@
       padding-left: 0.75rem;
     }
     .header-actions {
+      display: none;
+    }
+    .bird-link {
       display: none;
     }
     .profile-bio hgroup {
