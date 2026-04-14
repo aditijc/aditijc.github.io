@@ -1,2 +1,2 @@
-Designed with some help from GPT-4o :D
+Designed with some help from Claude :D
 (graphic design by me)
