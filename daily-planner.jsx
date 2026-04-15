@@ -35,7 +35,7 @@ const formatTimer = (secs) => {
 const PRIORITY_COLORS = {
   high: { bg: "#FDEAEA", dot: "#D94F4F", label: "High" },
   medium: { bg: "#FDF5E6", dot: "#E6A830", label: "Med" },
-  low: { bg: "#E8F4EC", dot: "#4CAF76", label: "Low" },
+  low: { bg: "#E0F7FA", dot: "#0097A7", label: "Low" },
 };
 
 /* ── Availability Grid ── */
@@ -271,7 +271,12 @@ export default function DailyPlanner() {
   const [stressMode, setStressMode] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editValues, setEditValues] = useState({ name: "", duration: 30, priority: "medium" });
+  const [savedForLater, setSavedForLater] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("planner_saved")) || []; } catch { return []; }
+  });
   const inputRef = useRef(null);
+  const dragTaskId = useRef(null);
+  const [dragOverId, setDragOverId] = useState(null);
   const [today] = useState(() => new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
 
   useEffect(() => { setAnimateIn(true); }, []);
@@ -281,6 +286,7 @@ export default function DailyPlanner() {
   useEffect(() => { localStorage.setItem("planner_restBreak", JSON.stringify(restBreak)); }, [restBreak]);
   useEffect(() => { localStorage.setItem("planner_schedule", JSON.stringify(schedule)); }, [schedule]);
   useEffect(() => { localStorage.setItem("planner_completed", JSON.stringify([...completed])); }, [completed]);
+  useEffect(() => { localStorage.setItem("planner_saved", JSON.stringify(savedForLater)); }, [savedForLater]);
 
   const addTask = useCallback(() => {
     if (!taskName.trim()) return;
@@ -328,6 +334,59 @@ export default function DailyPlanner() {
   };
 
   const cancelEdit = () => setEditingTaskId(null);
+
+  const handleDragStart = (e, id) => {
+    dragTaskId.current = id;
+    e.dataTransfer.effectAllowed = "move";
+  };
+  const handleDragOver = (e, id) => {
+    e.preventDefault();
+    if (id !== dragTaskId.current) setDragOverId(id);
+  };
+  const handleDrop = (e, id) => {
+    e.preventDefault();
+    if (!dragTaskId.current || dragTaskId.current === id) { setDragOverId(null); return; }
+    setSchedule((prev) => {
+      if (!prev) return prev;
+      const items = [...prev.scheduled];
+      const from = items.findIndex((t) => t.id === dragTaskId.current);
+      const to = items.findIndex((t) => t.id === id);
+      if (from === -1 || to === -1) return prev;
+      const [moved] = items.splice(from, 1);
+      items.splice(to, 0, moved);
+      // Recompute start/end times sequentially from the original first start
+      const firstStart = timeToMins(prev.scheduled[0].startHour, prev.scheduled[0].startMin);
+      let cursor = firstStart;
+      const recomputed = items.map((item, i) => {
+        const start = i === 0 ? cursor : cursor + restBreak;
+        const rounded = Math.ceil(item.duration / 15) * 15;
+        const end = start + rounded;
+        cursor = end;
+        return {
+          ...item,
+          startHour: Math.floor(start / 60), startMin: start % 60,
+          endHour: Math.floor(end / 60), endMin: end % 60,
+          hasBreakBefore: i > 0 && restBreak > 0,
+        };
+      });
+      return { ...prev, scheduled: recomputed };
+    });
+    setDragOverId(null);
+    dragTaskId.current = null;
+  };
+  const handleDragEnd = () => { setDragOverId(null); dragTaskId.current = null; };
+
+  const saveForLater = (task) => {
+    setSavedForLater((prev) => prev.some((t) => t.id === task.id) ? prev : [...prev, { id: task.id, name: task.name, duration: task.duration, priority: task.priority }]);
+    removeTask(task.id);
+  };
+
+  const addFromSaved = (saved) => {
+    setTasks((prev) => [...prev, { ...saved, id: Date.now(), dependsOn: [] }]);
+    setSavedForLater((prev) => prev.filter((t) => t.id !== saved.id));
+  };
+
+  const removeSaved = (id) => setSavedForLater((prev) => prev.filter((t) => t.id !== id));
 
   const toggleComplete = (id) => {
     setCompleted((prev) => {
@@ -378,7 +437,9 @@ export default function DailyPlanner() {
       if (visited.has(task.id)) return 0;
       visited.add(task.id);
       if (!task.dependsOn || !task.dependsOn.length) return 0;
-      return 1 + Math.max(...task.dependsOn.filter((d) => taskMap.has(d)).map((d) => getOrder(taskMap.get(d), visited)));
+      const activeDeps = task.dependsOn.filter((d) => taskMap.has(d));
+      if (!activeDeps.length) return 0;
+      return 1 + Math.max(...activeDeps.map((d) => getOrder(taskMap.get(d), visited)));
     };
 
     const sorted = [...incompleteTasks].sort((a, b) => {
@@ -626,7 +687,7 @@ export default function DailyPlanner() {
                   <div key={task.id} className="task-item" style={{
                     background: P.card, borderRadius: 12, padding: "14px 16px",
                     border: `1px solid ${P.border}`, display: "grid",
-                    gridTemplateColumns: "20px minmax(0,1fr) 56px 24px 24px 24px",
+                    gridTemplateColumns: "20px minmax(0,1fr) 56px 24px 24px 24px 24px",
                     alignItems: "center", columnGap: 12, minHeight: 72, animationDelay: `${i * 0.05}s`,
                     opacity: done ? 0.55 : 1, transition: "opacity 0.3s ease",
                   }}>
@@ -657,6 +718,11 @@ export default function DailyPlanner() {
                     ) : (
                       <span style={{ width: 24, height: 24, display: "inline-block" }} />
                     )}
+                    <button onClick={() => saveForLater(task)} title="Save for later" style={{
+                      background: "none", border: "none", color: P.textMuted, fontSize: 14,
+                      borderRadius: 6, lineHeight: 1, width: 24, height: 24, padding: 0,
+                      whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                    }}>☆</button>
                     <button onClick={() => startEdit(task)} title="Edit task" style={{
                       background: "none", border: "none", color: P.textMuted, fontSize: 13,
                       borderRadius: 6, lineHeight: 1, width: 24, height: 24, padding: 0,
@@ -720,9 +786,9 @@ export default function DailyPlanner() {
         </div>
 
         {/* ── Right Column — Schedule ── */}
-        <div>
+        <div style={{ position: "sticky", top: 20, alignSelf: "start", maxHeight: "calc(100vh - 40px)", overflowY: "auto" }}>
           {schedule ? (
-            <div style={{ background: P.card, borderRadius: 16, padding: 24, border: `1px solid ${P.border}`, animation: "fadeIn 0.5s ease", position: "sticky", top: 20 }}>
+            <div style={{ background: P.card, borderRadius: 16, padding: 24, border: `1px solid ${P.border}`, animation: "fadeIn 0.5s ease" }}>
               <h2 style={{ fontSize: 20, fontWeight: 400, marginBottom: 4, display: "flex", alignItems: "center", gap: 10 }}>
                 <span style={{ fontSize: 20 }}>❧</span> Your Schedule
               </h2>
@@ -746,7 +812,13 @@ export default function DailyPlanner() {
                           </div>
                         </div>
                       )}
-                      <div className="sched-item" style={{ display: "flex", gap: 16, animationDelay: `${i * 0.08}s`, opacity: 0, animationFillMode: "forwards" }}>
+                      <div className="sched-item"
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, item.id)}
+                        onDragOver={(e) => handleDragOver(e, item.id)}
+                        onDrop={(e) => handleDrop(e, item.id)}
+                        onDragEnd={handleDragEnd}
+                        style={{ display: "flex", gap: 16, animationDelay: `${i * 0.08}s`, opacity: dragTaskId.current === item.id ? 0.4 : 0, animationFillMode: "forwards", cursor: "grab" }}>
                         <div style={{ width: 72, flexShrink: 0, textAlign: "right", paddingTop: 14, fontFamily: dmSans }}>
                           <div style={{ fontSize: 13, fontWeight: 600 }}>{formatTime(item.startHour, item.startMin)}</div>
                           <div style={{ fontSize: 11, color: P.textMuted }}>{formatDuration(item.duration)}</div>
@@ -755,7 +827,7 @@ export default function DailyPlanner() {
                           <div style={{ width: 10, height: 10, borderRadius: "50%", background: pc.dot, border: `2px solid ${P.card}`, boxShadow: `0 0 0 2px ${pc.dot}`, zIndex: 1 }} />
                           {i < schedule.scheduled.length - 1 && <div style={{ width: 2, flex: 1, background: `linear-gradient(to bottom, ${pc.dot}40, ${P.border})`, minHeight: 30 }} />}
                         </div>
-                        <div style={{ flex: 1, background: completed.has(item.id) ? `${pc.bg}88` : pc.bg, borderRadius: 10, padding: "12px 16px", marginBottom: 10, borderLeft: `3px solid ${pc.dot}`, display: "flex", alignItems: "center", gap: 10, opacity: completed.has(item.id) ? 0.6 : 1, transition: "opacity 0.3s ease" }}>
+                        <div style={{ flex: 1, background: dragOverId === item.id ? `${pc.dot}30` : completed.has(item.id) ? `${pc.bg}88` : pc.bg, borderRadius: 10, padding: "12px 16px", marginBottom: 10, borderLeft: `3px solid ${pc.dot}`, display: "flex", alignItems: "center", gap: 10, opacity: completed.has(item.id) ? 0.6 : 1, transition: "background 0.15s ease, opacity 0.3s ease" }}>
                           <button onClick={() => toggleComplete(item.id)} style={{
                             width: 20, height: 20, borderRadius: 6, flexShrink: 0, cursor: "pointer",
                             border: completed.has(item.id) ? "none" : `2px solid ${pc.dot}`,
@@ -796,7 +868,7 @@ export default function DailyPlanner() {
           ) : (
             <div style={{
               background: P.card, borderRadius: 16, padding: "48px 24px", border: `1px solid ${P.border}`,
-              textAlign: "center", position: "sticky", top: 20,
+              textAlign: "center",
             }}>
               <div style={{ fontSize: 32, marginBottom: 12, opacity: 0.3 }}>❧</div>
               <div style={{ fontFamily: dmSans, fontSize: 14, color: P.textMuted }}>
@@ -807,6 +879,49 @@ export default function DailyPlanner() {
               </div>
             </div>
           )}
+
+          {/* Save for Later */}
+          <div style={{ background: P.card, borderRadius: 16, padding: 20, border: `1px solid ${P.border}`, marginTop: 24 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 400, marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 16 }}>☆</span>
+              <span style={{ fontFamily: dmSans }}>Saved for Later</span>
+            </h2>
+            {savedForLater.length === 0 ? (
+              <div style={{ fontFamily: dmSans, fontSize: 13, color: P.textMuted }}>
+                Hit ☆ on any task to save it here across resets and days.
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {savedForLater.map((saved) => {
+                  const pc = PRIORITY_COLORS[saved.priority];
+                  return (
+                    <div key={saved.id} style={{
+                      display: "grid", gridTemplateColumns: "8px 1fr auto auto",
+                      alignItems: "center", gap: 10,
+                      background: P.taskBg, borderRadius: 10, padding: "10px 12px",
+                      border: `1px solid ${P.border}`,
+                    }}>
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: pc.dot }} />
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontFamily: dmSans, fontSize: 13, fontWeight: 500, color: P.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{saved.name}</div>
+                        <div style={{ fontFamily: dmSans, fontSize: 11, color: P.textMuted }}>{formatDuration(saved.duration)}</div>
+                      </div>
+                      <button onClick={() => addFromSaved(saved)} style={{
+                        background: "none", border: `1px solid ${P.border}`, borderRadius: 6,
+                        color: P.accent, fontSize: 11, fontWeight: 600, fontFamily: dmSans,
+                        padding: "4px 8px", whiteSpace: "nowrap",
+                      }}>+ Today</button>
+                      <button onClick={() => removeSaved(saved.id)} style={{
+                        background: "none", border: "none", color: P.textMuted, fontSize: 18, fontWeight: 500,
+                        borderRadius: 6, lineHeight: 1, width: 24, height: 24, padding: 0,
+                        display: "inline-flex", alignItems: "center", justifyContent: "center",
+                      }}>×</button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
