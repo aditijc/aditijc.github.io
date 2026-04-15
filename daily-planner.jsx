@@ -158,9 +158,16 @@ function Timer({ task, onClose }) {
     return () => clearInterval(intervalRef.current);
   }, [running, remaining]);
 
+  const handleClose = () => {
+    clearInterval(intervalRef.current);
+    const remainingMins = Math.round(remaining / 60);
+    onClose(remainingMins);
+  };
+
   const progress = 1 - remaining / totalSecs;
   const pc = PRIORITY_COLORS[task.priority];
   const circumference = 2 * Math.PI * 90;
+  const remainingMins = Math.round(remaining / 60);
 
   return (
     <div style={{
@@ -194,6 +201,12 @@ function Timer({ task, onClose }) {
           </div>
         </div>
 
+        {remainingMins < task.duration && !finished && (
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: P.accent, marginBottom: 16 }}>
+            {formatDuration(remainingMins)} remaining · duration will update on close
+          </div>
+        )}
+
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
           {!finished && (
             <button onClick={() => setRunning((p) => !p)} style={{
@@ -204,13 +217,13 @@ function Timer({ task, onClose }) {
             }}>{running ? "Pause" : remaining < totalSecs ? "Resume" : "Start"}</button>
           )}
           {!running && !finished && remaining < totalSecs && (
-            <button onClick={() => { setRemaining(totalSecs); setFinished(false); }} style={{
+            <button onClick={() => { setRemaining(totalSecs); elapsedRef.current = 0; setFinished(false); }} style={{
               padding: "12px 20px", borderRadius: 10, border: `1px solid ${P.border}`,
               background: P.card, color: P.textMuted, fontSize: 13, fontWeight: 500,
               fontFamily: "'DM Sans', sans-serif",
             }}>Reset</button>
           )}
-          <button onClick={onClose} style={{
+          <button onClick={handleClose} style={{
             padding: "12px 20px", borderRadius: 10,
             border: finished ? "none" : `1px solid ${P.border}`,
             background: finished ? "#4CAF76" : P.card,
@@ -225,22 +238,49 @@ function Timer({ task, onClose }) {
 
 /* ── Main ── */
 export default function DailyPlanner() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    try {
+      const savedDate = localStorage.getItem("planner_date");
+      const today = new Date().toDateString();
+      if (savedDate !== today) {
+        ["planner_tasks", "planner_slots", "planner_restBreak", "planner_schedule", "planner_completed"].forEach((k) => localStorage.removeItem(k));
+        localStorage.setItem("planner_date", today);
+        return [];
+      }
+      return JSON.parse(localStorage.getItem("planner_tasks")) || [];
+    } catch { return []; }
+  });
   const [taskName, setTaskName] = useState("");
   const [taskDuration, setTaskDuration] = useState(30);
   const [taskPriority, setTaskPriority] = useState("medium");
   const [taskDeps, setTaskDeps] = useState([]);
-  const [slots, setSlots] = useState(() => new Array(TOTAL_SLOTS).fill(false));
-  const [restBreak, setRestBreak] = useState(0);
-  const [schedule, setSchedule] = useState(null);
-  const [completed, setCompleted] = useState(new Set());
+  const [slots, setSlots] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("planner_slots")) || new Array(TOTAL_SLOTS).fill(false); } catch { return new Array(TOTAL_SLOTS).fill(false); }
+  });
+  const [restBreak, setRestBreak] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("planner_restBreak")) ?? 0; } catch { return 0; }
+  });
+  const [schedule, setSchedule] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("planner_schedule")) || null; } catch { return null; }
+  });
+  const [completed, setCompleted] = useState(() => {
+    try { return new Set(JSON.parse(localStorage.getItem("planner_completed")) || []); } catch { return new Set(); }
+  });
   const [timerTask, setTimerTask] = useState(null);
   const [animateIn, setAnimateIn] = useState(false);
   const [stressMode, setStressMode] = useState(false);
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editValues, setEditValues] = useState({ name: "", duration: 30, priority: "medium" });
   const inputRef = useRef(null);
   const [today] = useState(() => new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
 
   useEffect(() => { setAnimateIn(true); }, []);
+
+  useEffect(() => { localStorage.setItem("planner_tasks", JSON.stringify(tasks)); }, [tasks]);
+  useEffect(() => { localStorage.setItem("planner_slots", JSON.stringify(slots)); }, [slots]);
+  useEffect(() => { localStorage.setItem("planner_restBreak", JSON.stringify(restBreak)); }, [restBreak]);
+  useEffect(() => { localStorage.setItem("planner_schedule", JSON.stringify(schedule)); }, [schedule]);
+  useEffect(() => { localStorage.setItem("planner_completed", JSON.stringify([...completed])); }, [completed]);
 
   const addTask = useCallback(() => {
     if (!taskName.trim()) return;
@@ -257,7 +297,37 @@ export default function DailyPlanner() {
       ...t, dependsOn: t.dependsOn.filter((d) => d !== id),
     })).filter((t) => t.id !== id));
     setCompleted((prev) => { const n = new Set(prev); n.delete(id); return n; });
+    if (editingTaskId === id) setEditingTaskId(null);
   };
+
+  const patchSchedule = (id, patch) => {
+    setSchedule((prev) => {
+      if (!prev) return prev;
+      const update = (arr) => arr.map((t) => t.id === id ? { ...t, ...patch } : t);
+      return { ...prev, scheduled: update(prev.scheduled), unscheduled: update(prev.unscheduled) };
+    });
+  };
+
+  const updateTaskDuration = (id, mins) => {
+    if (mins <= 0) return;
+    setTasks((prev) => prev.map((t) => t.id === id ? { ...t, duration: mins } : t));
+    patchSchedule(id, { duration: mins });
+  };
+
+  const startEdit = (task) => {
+    setEditingTaskId(task.id);
+    setEditValues({ name: task.name, duration: task.duration, priority: task.priority });
+  };
+
+  const saveEdit = (id) => {
+    if (!editValues.name.trim()) return;
+    const patch = { name: editValues.name.trim(), duration: editValues.duration, priority: editValues.priority };
+    setTasks((prev) => prev.map((t) => t.id === id ? { ...t, ...patch } : t));
+    patchSchedule(id, patch);
+    setEditingTaskId(null);
+  };
+
+  const cancelEdit = () => setEditingTaskId(null);
 
   const toggleComplete = (id) => {
     setCompleted((prev) => {
@@ -336,8 +406,9 @@ export default function DailyPlanner() {
         const breakPad = scheduled.length > 0 && blockStart === block.startMins ? restBreak : 0;
         const actualStart = blockStart + breakPad;
         if (actualStart >= block.endMins) continue;
-        if (block.endMins - actualStart >= task.duration) {
-          const endMins = actualStart + task.duration;
+        const roundedDuration = Math.ceil(task.duration / 15) * 15;
+        if (block.endMins - actualStart >= roundedDuration) {
+          const endMins = actualStart + roundedDuration;
           scheduled.push({
             ...task,
             startHour: Math.floor(actualStart / 60), startMin: actualStart % 60,
@@ -361,6 +432,8 @@ export default function DailyPlanner() {
   const resetAll = () => {
     setTasks([]); setSlots(new Array(TOTAL_SLOTS).fill(false));
     setRestBreak(0); setSchedule(null); setCompleted(new Set());
+    ["planner_tasks", "planner_slots", "planner_restBreak", "planner_schedule", "planner_completed", "planner_date"]
+      .forEach((k) => localStorage.removeItem(k));
   };
 
   const totalTaskTime = tasks.reduce((s, t) => s + t.duration, 0);
@@ -389,7 +462,7 @@ export default function DailyPlanner() {
         @media (max-width: 780px) { .planner-grid { grid-template-columns: 1fr !important; } }
       `}</style>
 
-      {timerTask && <Timer task={timerTask} onClose={() => setTimerTask(null)} />}
+      {timerTask && <Timer task={timerTask} onClose={(elapsedMins) => { updateTaskDuration(timerTask.id, elapsedMins); setTimerTask(null); }} />}
 
       {/* Header */}
       <div style={{ padding: "40px 32px 24px", maxWidth: 960, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 12 }}>
@@ -426,11 +499,10 @@ export default function DailyPlanner() {
                 style={{ fontSize: 14, padding: "12px 16px", border: `1px solid ${P.border}`, borderRadius: 10, background: P.taskBg, color: P.text, width: "100%" }} />
               <div style={{ display: "flex", gap: 8 }}>
                 <div style={{ flex: 1 }}>
-                  <label style={lbl}>Duration</label>
-                  <select value={taskDuration} onChange={(e) => setTaskDuration(Number(e.target.value))}
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 13, appearance: "none" }}>
-                    {[15, 30, 45, 60, 90, 120, 180, 240].map((m) => <option key={m} value={m}>{formatDuration(m)}</option>)}
-                  </select>
+                  <label style={lbl}>Duration (min)</label>
+                  <input type="number" min="1" value={taskDuration}
+                    onChange={(e) => { const v = parseInt(e.target.value); if (v > 0) setTaskDuration(v); }}
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 13 }} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <label style={lbl}>Priority</label>
@@ -506,11 +578,55 @@ export default function DailyPlanner() {
                 const pc = PRIORITY_COLORS[task.priority];
                 const dep = task.dependsOn.length ? task.dependsOn.map((d) => taskMap.get(d)).filter(Boolean) : [];
                 const done = completed.has(task.id);
+                const isEditing = editingTaskId === task.id;
+
+                if (isEditing) {
+                  return (
+                    <div key={task.id} className="task-item" style={{
+                      background: P.card, borderRadius: 12, padding: "14px 16px",
+                      border: `2px solid ${P.accent}`, display: "flex", flexDirection: "column", gap: 10,
+                      animationDelay: `${i * 0.05}s`,
+                    }}>
+                      <input
+                        autoFocus
+                        type="text"
+                        value={editValues.name}
+                        onChange={(e) => setEditValues((v) => ({ ...v, name: e.target.value }))}
+                        onKeyDown={(e) => { if (e.key === "Enter") saveEdit(task.id); if (e.key === "Escape") cancelEdit(); }}
+                        style={{ fontSize: 14, padding: "8px 12px", border: `1px solid ${P.border}`, borderRadius: 8, background: P.taskBg, color: P.text, width: "100%" }}
+                      />
+                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                        <input type="number" min="1" value={editValues.duration}
+                          onChange={(e) => { const v = parseInt(e.target.value); if (v > 0) setEditValues((ev) => ({ ...ev, duration: v })); }}
+                          style={{ width: 72, padding: "7px 10px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 13 }} />
+                        <div style={{ display: "flex", gap: 4, flex: 1 }}>
+                          {Object.entries(PRIORITY_COLORS).map(([key, val]) => (
+                            <button key={key} onClick={() => setEditValues((v) => ({ ...v, priority: key }))} style={{
+                              flex: 1, padding: "7px 6px", borderRadius: 8,
+                              border: editValues.priority === key ? `2px solid ${val.dot}` : `1px solid ${P.border}`,
+                              background: editValues.priority === key ? val.bg : P.taskBg,
+                              fontSize: 11, fontWeight: 600, color: val.dot,
+                            }}>{val.label}</button>
+                          ))}
+                        </div>
+                        <button onClick={() => saveEdit(task.id)} style={{
+                          padding: "7px 14px", borderRadius: 8, border: "none",
+                          background: P.accent, color: "#fff", fontSize: 13, fontWeight: 600,
+                        }}>Save</button>
+                        <button onClick={cancelEdit} style={{
+                          padding: "7px 10px", borderRadius: 8, border: `1px solid ${P.border}`,
+                          background: "none", color: P.textMuted, fontSize: 13,
+                        }}>Cancel</button>
+                      </div>
+                    </div>
+                  );
+                }
+
                 return (
                   <div key={task.id} className="task-item" style={{
                     background: P.card, borderRadius: 12, padding: "14px 16px",
                     border: `1px solid ${P.border}`, display: "grid",
-                    gridTemplateColumns: "20px minmax(0,1fr) 56px 24px 24px",
+                    gridTemplateColumns: "20px minmax(0,1fr) 56px 24px 24px 24px",
                     alignItems: "center", columnGap: 12, minHeight: 72, animationDelay: `${i * 0.05}s`,
                     opacity: done ? 0.55 : 1, transition: "opacity 0.3s ease",
                   }}>
@@ -541,6 +657,11 @@ export default function DailyPlanner() {
                     ) : (
                       <span style={{ width: 24, height: 24, display: "inline-block" }} />
                     )}
+                    <button onClick={() => startEdit(task)} title="Edit task" style={{
+                      background: "none", border: "none", color: P.textMuted, fontSize: 13,
+                      borderRadius: 6, lineHeight: 1, width: 24, height: 24, padding: 0,
+                      whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                    }}>✎</button>
                     <button onClick={() => removeTask(task.id)} style={{
                       background: "none", border: "none", color: P.textMuted, fontSize: 18, fontWeight: 500,
                       borderRadius: 6, lineHeight: 1, width: 24, height: 24, padding: 0,
