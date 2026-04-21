@@ -32,6 +32,30 @@ const formatTimer = (secs) => {
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 };
 
+const todayStr = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
+const getDuePriority = (dueBy) => {
+  if (!dueBy) return "low";
+  const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(today.getTime() + 86400000);
+  const due = new Date(dueBy + "T00:00:00");
+  if (due <= today) return "high";
+  if (due <= tomorrow) return "medium";
+  return "low";
+};
+const formatDueLabel = (dueBy) => {
+  if (!dueBy) return null;
+  const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(today.getTime() + 86400000);
+  const due = new Date(dueBy + "T00:00:00");
+  if (due < today) return "overdue";
+  if (due.getTime() === today.getTime()) return "today";
+  if (due.getTime() === tomorrow.getTime()) return "tomorrow";
+  return due.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+};
+
 const PRIORITY_COLORS = {
   high: { bg: "#FDEAEA", dot: "#D94F4F", label: "High" },
   medium: { bg: "#FDF5E6", dot: "#E6A830", label: "Med" },
@@ -165,7 +189,7 @@ function Timer({ task, onClose }) {
   };
 
   const progress = 1 - remaining / totalSecs;
-  const pc = PRIORITY_COLORS[task.priority];
+  const pc = PRIORITY_COLORS[getDuePriority(task.dueBy)];
   const circumference = 2 * Math.PI * 90;
   const remainingMins = Math.round(remaining / 60);
 
@@ -252,7 +276,7 @@ export default function DailyPlanner() {
   });
   const [taskName, setTaskName] = useState("");
   const [taskDuration, setTaskDuration] = useState(30);
-  const [taskPriority, setTaskPriority] = useState("medium");
+  const [taskDueBy, setTaskDueBy] = useState("");
   const [taskDeps, setTaskDeps] = useState([]);
   const [slots, setSlots] = useState(() => {
     try { return JSON.parse(localStorage.getItem("planner_slots")) || new Array(TOTAL_SLOTS).fill(false); } catch { return new Array(TOTAL_SLOTS).fill(false); }
@@ -270,7 +294,7 @@ export default function DailyPlanner() {
   const [animateIn, setAnimateIn] = useState(false);
   const [stressMode, setStressMode] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
-  const [editValues, setEditValues] = useState({ name: "", duration: 30, priority: "medium" });
+  const [editValues, setEditValues] = useState({ name: "", duration: 30, dueBy: "" });
   const [savedForLater, setSavedForLater] = useState(() => {
     try { return JSON.parse(localStorage.getItem("planner_saved")) || []; } catch { return []; }
   });
@@ -292,11 +316,11 @@ export default function DailyPlanner() {
     if (!taskName.trim()) return;
     setTasks((prev) => [...prev, {
       id: Date.now(), name: taskName.trim(), duration: taskDuration,
-      priority: taskPriority, dependsOn: taskDeps.length ? [...taskDeps] : [],
+      dueBy: taskDueBy, dependsOn: taskDeps.length ? [...taskDeps] : [],
     }]);
-    setTaskName(""); setTaskDuration(30); setTaskPriority("medium"); setTaskDeps([]);
+    setTaskName(""); setTaskDuration(30); setTaskDueBy(""); setTaskDeps([]);
     inputRef.current?.focus();
-  }, [taskName, taskDuration, taskPriority, taskDeps]);
+  }, [taskName, taskDuration, taskDueBy, taskDeps]);
 
   const removeTask = (id) => {
     setTasks((prev) => prev.map((t) => ({
@@ -322,12 +346,12 @@ export default function DailyPlanner() {
 
   const startEdit = (task) => {
     setEditingTaskId(task.id);
-    setEditValues({ name: task.name, duration: task.duration, priority: task.priority });
+    setEditValues({ name: task.name, duration: task.duration, dueBy: task.dueBy || "" });
   };
 
   const saveEdit = (id) => {
     if (!editValues.name.trim()) return;
-    const patch = { name: editValues.name.trim(), duration: editValues.duration, priority: editValues.priority };
+    const patch = { name: editValues.name.trim(), duration: editValues.duration, dueBy: editValues.dueBy };
     setTasks((prev) => prev.map((t) => t.id === id ? { ...t, ...patch } : t));
     patchSchedule(id, patch);
     setEditingTaskId(null);
@@ -377,7 +401,7 @@ export default function DailyPlanner() {
   const handleDragEnd = () => { setDragOverId(null); dragTaskId.current = null; };
 
   const saveForLater = (task) => {
-    setSavedForLater((prev) => prev.some((t) => t.id === task.id) ? prev : [...prev, { id: task.id, name: task.name, duration: task.duration, priority: task.priority }]);
+    setSavedForLater((prev) => prev.some((t) => t.id === task.id) ? prev : [...prev, { id: task.id, name: task.name, duration: task.duration, dueBy: task.dueBy || "" }]);
     removeTask(task.id);
   };
 
@@ -446,7 +470,7 @@ export default function DailyPlanner() {
       const depA = getOrder(a), depB = getOrder(b);
       if (depA !== depB) return depA - depB;
       const pri = { high: 0, medium: 1, low: 2 };
-      return pri[a.priority] - pri[b.priority] || b.duration - a.duration;
+      return pri[getDuePriority(a.dueBy)] - pri[getDuePriority(b.dueBy)] || b.duration - a.duration;
     });
 
     const availBlocks = freeBlocks.map((b) => ({ ...b }));
@@ -566,17 +590,10 @@ export default function DailyPlanner() {
                     style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 13 }} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={lbl}>Priority</label>
-                  <div style={{ display: "flex", gap: 4 }}>
-                    {Object.entries(PRIORITY_COLORS).map(([key, val]) => (
-                      <button key={key} onClick={() => setTaskPriority(key)} style={{
-                        flex: 1, padding: "9px 6px", borderRadius: 8,
-                        border: taskPriority === key ? `2px solid ${val.dot}` : `1px solid ${P.border}`,
-                        background: taskPriority === key ? val.bg : P.taskBg,
-                        fontSize: 11, fontWeight: 600, color: val.dot,
-                      }}>{val.label}</button>
-                    ))}
-                  </div>
+                  <label style={lbl}>Due By</label>
+                  <input type="date" value={taskDueBy} min={todayStr()}
+                    onChange={(e) => setTaskDueBy(e.target.value)}
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: `1px solid ${P.border}`, background: P.taskBg, color: taskDueBy ? P.text : P.textMuted, fontSize: 13, colorScheme: "dark" }} />
                 </div>
               </div>
               {/* Dependency selector */}
@@ -636,7 +653,7 @@ export default function DailyPlanner() {
           {tasks.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {tasks.map((task, i) => {
-                const pc = PRIORITY_COLORS[task.priority];
+                const pc = PRIORITY_COLORS[getDuePriority(task.dueBy)];
                 const dep = task.dependsOn.length ? task.dependsOn.map((d) => taskMap.get(d)).filter(Boolean) : [];
                 const done = completed.has(task.id);
                 const isEditing = editingTaskId === task.id;
@@ -660,16 +677,9 @@ export default function DailyPlanner() {
                         <input type="number" min="1" value={editValues.duration}
                           onChange={(e) => { const v = parseInt(e.target.value); if (v > 0) setEditValues((ev) => ({ ...ev, duration: v })); }}
                           style={{ width: 72, padding: "7px 10px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 13 }} />
-                        <div style={{ display: "flex", gap: 4, flex: 1 }}>
-                          {Object.entries(PRIORITY_COLORS).map(([key, val]) => (
-                            <button key={key} onClick={() => setEditValues((v) => ({ ...v, priority: key }))} style={{
-                              flex: 1, padding: "7px 6px", borderRadius: 8,
-                              border: editValues.priority === key ? `2px solid ${val.dot}` : `1px solid ${P.border}`,
-                              background: editValues.priority === key ? val.bg : P.taskBg,
-                              fontSize: 11, fontWeight: 600, color: val.dot,
-                            }}>{val.label}</button>
-                          ))}
-                        </div>
+                        <input type="date" value={editValues.dueBy} min={todayStr()}
+                          onChange={(e) => setEditValues((v) => ({ ...v, dueBy: e.target.value }))}
+                          style={{ flex: 1, padding: "7px 10px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: editValues.dueBy ? P.text : P.textMuted, fontSize: 13, colorScheme: "dark" }} />
                         <button onClick={() => saveEdit(task.id)} style={{
                           padding: "7px 14px", borderRadius: 8, border: "none",
                           background: P.accent, color: "#fff", fontSize: 13, fontWeight: 600,
@@ -702,6 +712,7 @@ export default function DailyPlanner() {
                     </button>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ fontSize: 14, fontWeight: 500, fontFamily: dmSans, textDecoration: done ? "line-through" : "none", color: done ? P.textMuted : "#fff8f4", wordBreak: "normal", overflowWrap: "normal" }}>{task.name}</div>
+                      {task.dueBy && <div style={{ fontSize: 11, color: pc.dot, fontFamily: dmSans, marginTop: 2 }}>due {formatDueLabel(task.dueBy)}</div>}
                       {dep.length > 0 && <div style={{ fontSize: 11, color: P.textMuted, fontFamily: dmSans, marginTop: 2 }}>↳ after {dep.map((d) => d.name).join(", ")}</div>}
                     </div>
                     <span style={{
@@ -798,7 +809,7 @@ export default function DailyPlanner() {
               </div>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {schedule.scheduled.map((item, i) => {
-                  const pc = PRIORITY_COLORS[item.priority];
+                  const pc = PRIORITY_COLORS[getDuePriority(item.dueBy)];
                   const dep = item.dependsOn && item.dependsOn.length ? item.dependsOn.map((d) => taskMap.get(d)).filter(Boolean) : [];
                   return (
                     <div key={item.id}>
@@ -893,7 +904,7 @@ export default function DailyPlanner() {
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                 {savedForLater.map((saved) => {
-                  const pc = PRIORITY_COLORS[saved.priority];
+                  const pc = PRIORITY_COLORS[getDuePriority(saved.dueBy)];
                   return (
                     <div key={saved.id} style={{
                       display: "grid", gridTemplateColumns: "8px 1fr auto auto",
