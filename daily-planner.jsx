@@ -47,13 +47,22 @@ const getDuePriority = (dueBy) => {
 };
 const formatDueLabel = (dueBy) => {
   if (!dueBy) return null;
+  const [datePart, timePart] = dueBy.split("T");
   const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const tomorrow = new Date(today.getTime() + 86400000);
-  const due = new Date(dueBy + "T00:00:00");
-  if (due < today) return "overdue";
-  if (due.getTime() === today.getTime()) return "today";
-  if (due.getTime() === tomorrow.getTime()) return "tomorrow";
-  return due.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const due = new Date(datePart + "T00:00:00");
+  let label;
+  if (due < today) label = "overdue";
+  else if (due.getTime() === today.getTime()) label = "today";
+  else if (due.getTime() === tomorrow.getTime()) label = "tomorrow";
+  else label = due.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  if (timePart) {
+    const [h, m] = timePart.split(":").map(Number);
+    const ampm = h < 12 ? "am" : "pm";
+    const h12 = h % 12 || 12;
+    label += ` ${m === 0 ? h12 : `${h12}:${String(m).padStart(2,"0")}`}${ampm}`;
+  }
+  return label;
 };
 
 const PRIORITY_COLORS = {
@@ -61,6 +70,47 @@ const PRIORITY_COLORS = {
   medium: { bg: "#FDF5E6", dot: "#E6A830", label: "Med" },
   low: { bg: "#E0F7FA", dot: "#0097A7", label: "Low" },
 };
+
+/* ── Due Picker ── */
+function DuePicker({ value, onChange }) {
+  const [datePart, timePart] = value ? value.split("T") : ["", ""];
+  const pills = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() + i);
+    const val = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const label = i === 0 ? "Today" : i === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", { weekday: "short" });
+    return { label, val };
+  });
+
+  const handleDay = (dayVal) => {
+    if (dayVal === datePart) { onChange(""); return; }
+    onChange(timePart ? `${dayVal}T${timePart}` : dayVal);
+  };
+  const handleTime = (t) => {
+    const base = datePart || todayStr();
+    onChange(t ? `${base}T${t}` : base);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+        {pills.map(({ label, val }) => {
+          const active = datePart === val;
+          const pc = PRIORITY_COLORS[getDuePriority(val)];
+          return (
+            <button key={val} onClick={() => handleDay(val)} style={{
+              padding: "5px 9px", borderRadius: 6, fontSize: 11, fontWeight: 600,
+              border: active ? `2px solid ${pc.dot}` : `1px solid ${P.border}`,
+              background: active ? pc.bg : P.taskBg,
+              color: active ? pc.dot : P.textMuted,
+            }}>{label}</button>
+          );
+        })}
+      </div>
+      <input type="time" value={timePart || ""} onChange={(e) => handleTime(e.target.value)}
+        style={{ padding: "7px 10px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: timePart ? P.text : P.textMuted, fontSize: 12, colorScheme: "dark", width: "100%" }} />
+    </div>
+  );
+}
 
 /* ── Availability Grid ── */
 function AvailabilityGrid({ slots, setSlots }) {
@@ -591,9 +641,7 @@ export default function DailyPlanner() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <label style={lbl}>Due By</label>
-                  <input type="date" value={taskDueBy} min={todayStr()}
-                    onChange={(e) => setTaskDueBy(e.target.value)}
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: `1px solid ${P.border}`, background: P.taskBg, color: taskDueBy ? P.text : P.textMuted, fontSize: 13, colorScheme: "dark" }} />
+                  <DuePicker value={taskDueBy} onChange={setTaskDueBy} />
                 </div>
               </div>
               {/* Dependency selector */}
@@ -677,9 +725,9 @@ export default function DailyPlanner() {
                         <input type="number" min="1" value={editValues.duration}
                           onChange={(e) => { const v = parseInt(e.target.value); if (v > 0) setEditValues((ev) => ({ ...ev, duration: v })); }}
                           style={{ width: 72, padding: "7px 10px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 13 }} />
-                        <input type="date" value={editValues.dueBy} min={todayStr()}
-                          onChange={(e) => setEditValues((v) => ({ ...v, dueBy: e.target.value }))}
-                          style={{ flex: 1, padding: "7px 10px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: editValues.dueBy ? P.text : P.textMuted, fontSize: 13, colorScheme: "dark" }} />
+                        <div style={{ flex: 1 }}>
+                          <DuePicker value={editValues.dueBy} onChange={(v) => setEditValues((ev) => ({ ...ev, dueBy: v }))} />
+                        </div>
                         <button onClick={() => saveEdit(task.id)} style={{
                           padding: "7px 14px", borderRadius: 8, border: "none",
                           background: P.accent, color: "#fff", fontSize: 13, fontWeight: 600,
