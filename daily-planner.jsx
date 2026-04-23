@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 
-const HOURS = Array.from({ length: 17 }, (_, i) => i + 6);
+const HOURS = Array.from({ length: 18 }, (_, i) => i + 6);
 const SLOTS_PER_HOUR = 4;
 const TOTAL_SLOTS = HOURS.length * SLOTS_PER_HOUR;
 
@@ -70,47 +70,6 @@ const PRIORITY_COLORS = {
   medium: { bg: "#FDF5E6", dot: "#E6A830", label: "Med" },
   low: { bg: "#E0F7FA", dot: "#0097A7", label: "Low" },
 };
-
-/* ── Due Picker ── */
-function DuePicker({ value, onChange }) {
-  const [datePart, timePart] = value ? value.split("T") : ["", ""];
-  const pills = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(); d.setDate(d.getDate() + i);
-    const val = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-    const label = i === 0 ? "Today" : i === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", { weekday: "short" });
-    return { label, val };
-  });
-
-  const handleDay = (dayVal) => {
-    if (dayVal === datePart) { onChange(""); return; }
-    onChange(timePart ? `${dayVal}T${timePart}` : dayVal);
-  };
-  const handleTime = (t) => {
-    const base = datePart || todayStr();
-    onChange(t ? `${base}T${t}` : base);
-  };
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-        {pills.map(({ label, val }) => {
-          const active = datePart === val;
-          const pc = PRIORITY_COLORS[getDuePriority(val)];
-          return (
-            <button key={val} onClick={() => handleDay(val)} style={{
-              padding: "5px 9px", borderRadius: 6, fontSize: 11, fontWeight: 600,
-              border: active ? `2px solid ${pc.dot}` : `1px solid ${P.border}`,
-              background: active ? pc.bg : P.taskBg,
-              color: active ? pc.dot : P.textMuted,
-            }}>{label}</button>
-          );
-        })}
-      </div>
-      <input type="time" value={timePart || ""} onChange={(e) => handleTime(e.target.value)}
-        style={{ padding: "7px 10px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: timePart ? P.text : P.textMuted, fontSize: 12, colorScheme: "dark", width: "100%" }} />
-    </div>
-  );
-}
 
 /* ── Availability Grid ── */
 function AvailabilityGrid({ slots, setSlots }) {
@@ -641,7 +600,14 @@ export default function DailyPlanner() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <label style={lbl}>Due By</label>
-                  <DuePicker value={taskDueBy} onChange={setTaskDueBy} />
+                  <div style={{ display: "flex", gap: 6 }}>
+                    <input type="date" value={taskDueBy.split("T")[0] || ""} min={todayStr()}
+                      onChange={(e) => { const t = taskDueBy.split("T")[1]; setTaskDueBy(t ? `${e.target.value}T${t}` : e.target.value); }}
+                      style={{ flex: 2, padding: "10px 8px", borderRadius: 10, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 12, colorScheme: "dark" }} />
+                    <input type="time" value={taskDueBy.split("T")[1] || ""}
+                      onChange={(e) => { const d = taskDueBy.split("T")[0] || todayStr(); setTaskDueBy(e.target.value ? `${d}T${e.target.value}` : d); }}
+                      style={{ flex: 1, padding: "10px 8px", borderRadius: 10, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 12, colorScheme: "dark" }} />
+                  </div>
                 </div>
               </div>
               {/* Dependency selector */}
@@ -725,8 +691,13 @@ export default function DailyPlanner() {
                         <input type="number" min="1" value={editValues.duration}
                           onChange={(e) => { const v = parseInt(e.target.value); if (v > 0) setEditValues((ev) => ({ ...ev, duration: v })); }}
                           style={{ width: 72, padding: "7px 10px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 13 }} />
-                        <div style={{ flex: 1 }}>
-                          <DuePicker value={editValues.dueBy} onChange={(v) => setEditValues((ev) => ({ ...ev, dueBy: v }))} />
+                        <div style={{ flex: 1, display: "flex", gap: 6 }}>
+                          <input type="date" value={editValues.dueBy.split("T")[0] || ""} min={todayStr()}
+                            onChange={(e) => { const t = editValues.dueBy.split("T")[1]; setEditValues((ev) => ({ ...ev, dueBy: t ? `${e.target.value}T${t}` : e.target.value })); }}
+                            style={{ flex: 2, padding: "7px 8px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 12, colorScheme: "dark" }} />
+                          <input type="time" value={editValues.dueBy.split("T")[1] || ""}
+                            onChange={(e) => { const d = editValues.dueBy.split("T")[0] || todayStr(); setEditValues((ev) => ({ ...ev, dueBy: e.target.value ? `${d}T${e.target.value}` : d })); }}
+                            style={{ flex: 1, padding: "7px 8px", borderRadius: 8, border: `1px solid ${P.border}`, background: P.taskBg, color: P.text, fontSize: 12, colorScheme: "dark" }} />
                         </div>
                         <button onClick={() => saveEdit(task.id)} style={{
                           padding: "7px 14px", borderRadius: 8, border: "none",
