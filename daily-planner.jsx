@@ -40,7 +40,7 @@ const getDuePriority = (dueBy) => {
   if (!dueBy) return "low";
   const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const tomorrow = new Date(today.getTime() + 86400000);
-  const due = new Date(dueBy + "T00:00:00");
+  const due = new Date(dueBy.split("T")[0] + "T00:00:00");
   if (due <= today) return "high";
   if (due <= tomorrow) return "medium";
   return "low";
@@ -250,7 +250,7 @@ function Timer({ task, onClose }) {
             }}>{running ? "Pause" : remaining < totalSecs ? "Resume" : "Start"}</button>
           )}
           {!running && !finished && remaining < totalSecs && (
-            <button onClick={() => { setRemaining(totalSecs); elapsedRef.current = 0; setFinished(false); }} style={{
+            <button onClick={() => { setRemaining(totalSecs); setFinished(false); }} style={{
               padding: "12px 20px", borderRadius: 10, border: `1px solid ${P.border}`,
               background: P.card, color: P.textMuted, fontSize: 13, fontWeight: 500,
               fontFamily: "'DM Sans', sans-serif",

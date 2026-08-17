@@ -48,8 +48,8 @@
     <!-- React + ReactDOM UMD -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel standalone for JSX transform -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Babel standalone for JSX transform (pinned: unpinned majors have changed defaults under us) -->
+    <script src="https://unpkg.com/@babel/standalone@8/babel.min.js"></script>
 
     <script>
         (async () => {
@@ -87,7 +87,12 @@
                 .replace(/"1px solid #F0D0D0"/g, '"1px solid rgba(255,248,244,0.18)"')
                 .replace(/"#C0392B"/g, '"rgba(255,248,244,0.8)"');
 
-            const transformed = Babel.transform(patched, { presets: ['react'] }).code;
+            // runtime must be 'classic' — it compiles JSX to React.createElement, which the UMD
+            // React global provides. The 'automatic' runtime (Babel 8's default) emits an ESM
+            // `import ... from "react/jsx-runtime"`, which eval() cannot parse.
+            const transformed = Babel.transform(patched, {
+                presets: [['react', { runtime: 'classic' }]],
+            }).code;
             const code = transformed + '\nReactDOM.createRoot(document.getElementById("root")).render(React.createElement(DailyPlanner));';
             // eslint-disable-next-line no-eval
             eval(code);
