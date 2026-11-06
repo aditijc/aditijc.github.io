@@ -168,9 +168,17 @@
         window.addEventListener('mouseleave', function () { mouse.x = null; mouse.y = null; });
     }
 
+    // Follows the canvas's CSS size. Keeps the existing particles, rescaled, so
+    // a phone's toolbar collapsing mid-scroll doesn't reset the background.
     function resize() {
-        W = window.innerWidth;
-        H = window.innerHeight;
+        var w = canvas.clientWidth, h = canvas.clientHeight;
+        if (w === W && h === H) return;
+        for (var i = 0; i < particles.length; i++) {
+            particles[i].x *= w / W;
+            particles[i].y *= h / H;
+        }
+        W = w;
+        H = h;
         // Render at device resolution so hairlines stay crisp on HiDPI screens.
         var dpr = Math.min(window.devicePixelRatio || 1, 2);
         canvas.width = Math.round(W * dpr);
@@ -298,7 +306,7 @@
         requestAnimationFrame(frame);
     }
 
-    window.addEventListener('resize', init);
+    window.addEventListener('resize', resize);
     init();
     frame();
 }(this));

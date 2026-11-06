@@ -63,12 +63,18 @@
     line-height: 1.6;
   }
 
+  /* Anything the canvas can't reach, such as overscroll, matches the page. */
+  html:has(#particle-canvas) {
+    background-color: var(--bg) !important;
+  }
+
   #particle-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100lvh; /* stays full height when a phone's toolbar collapses */
     z-index: -1;
     pointer-events: none;
     background: var(--bg);
@@ -85,10 +91,11 @@
     color: #962a1c !important;
   }
 
-  /* White icon PNGs are tinted maroon on the cream theme */
-  :root[data-theme="light"] .buttons img {
-    filter: brightness(0) saturate(100%) invert(38%) sepia(77%) saturate(2258%) hue-rotate(-19deg) brightness(70%);
-  }
+  /* Each icon has a white and a red version. A CSS filter tint rendered too
+     bright on iOS, so the red is built into the image. */
+  .icon-light { display: none; }
+  :root[data-theme="light"] .icon-dark { display: none; }
+  :root[data-theme="light"] .icon-light { display: block; }
 
   /* ——— Theme toggle (bottom right) ——— */
   .theme-toggle {
@@ -373,7 +380,10 @@
     header {
       height: auto;
       background-image: none;
-      padding: 0.75rem 1.25rem 0.75rem;
+      padding: calc(1.25rem + env(safe-area-inset-top)) 1.25rem 0.75rem;
+    }
+    :root[data-theme="light"] header {
+      background-image: none;
     }
     header h1 {
       display: block;
