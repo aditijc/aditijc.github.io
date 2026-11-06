@@ -1,14 +1,63 @@
 /* styles.css */
 
+  /* ——— Theme tokens ——— */
+  :root {
+    --font-body: Seravek, 'Gill Sans Nova', 'Source Sans 3', Calibri, sans-serif;
+    --bg: #201d1b;
+    --text: #fff8f4;
+    --header-bg: rgba(32, 29, 27, 0.72);
+    --footer-bg: #272220;
+    --photo-shadow: 0 18px 40px rgb(0 0 0 / 0.35);
+    --toggle-bg: rgba(32, 29, 27, 0.75);
+    --toggle-border: rgba(255, 248, 244, 0.25);
+    --toggle-fg: #fff8f4;
+    --footer-text: #a82500;
+    /* accents */
+    --accent: rgb(184, 30, 3);
+    --accent-link: #bc5100;
+    --accent-hover: rgb(235, 153, 0);
+    --accent-visited: rgb(182, 28, 1);
+  }
+  :root[data-theme="light"] {
+    --bg: #f7efdd;
+    --text: #2b211c;
+    --header-bg: rgba(247, 239, 221, 0.55);
+    --footer-bg: #ede1cb;
+    --photo-shadow: 0 18px 40px rgb(80 40 20 / 0.18);
+    --toggle-bg: rgba(247, 239, 221, 0.85);
+    --toggle-border: rgba(169, 68, 43, 0.35);
+    --toggle-fg: #a9442b;
+    --footer-text: #a9442b;
+    /* softened accents for the cream theme */
+    --accent: #a9442b;
+    --accent-link: #b0642a;
+    --accent-hover: #cf9a3f;
+    --accent-visited: #9e4a33;
+  }
+
   h1, h2, h3 {
     font-family: 'Lora', Georgia, serif;
-    color: #fff8f4 !important;
+    color: var(--text) !important;
+  }
+
+  .profile-bio hgroup h2 {
+    font-family: var(--font-body);
+  }
+
+  /* Body text is meant to sit 10% lighter than Regular. Seravek has nothing
+     between Light and Regular, so a hairline stroke brings Light (about 80% of
+     Regular's ink) up to about 90%. */
+  .content-section p,
+  footer p,
+  .profile-bio hgroup h2 {
+    font-weight: 300;
+    -webkit-text-stroke: 0.02em;
   }
 
   body {
-    font-family: 'Poppins';
+    font-family: var(--font-body);
     background: transparent;
-    color: #fff8f4;
+    color: var(--text);
     margin: 0;
     padding-top: 0;
     line-height: 1.6;
@@ -22,7 +71,64 @@
     height: 100vh;
     z-index: -1;
     pointer-events: none;
+    background: var(--bg);
   }
+
+  /* Light theme uses the same header artwork with the bird recoloured red */
+  :root[data-theme="light"] header {
+    background-image: url('images/header_light.png');
+  }
+
+  /* Name in the header: a slightly darker shade of the bird red (#b23424) */
+  :root[data-theme="light"] header h1,
+  :root[data-theme="light"] header h1 strong {
+    color: #962a1c !important;
+  }
+
+  /* White icon PNGs are tinted maroon on the cream theme */
+  :root[data-theme="light"] .buttons img {
+    filter: brightness(0) saturate(100%) invert(38%) sepia(77%) saturate(2258%) hue-rotate(-19deg) brightness(70%);
+  }
+
+  /* ——— Theme toggle (bottom right) ——— */
+  .theme-toggle {
+    all: unset;
+    box-sizing: border-box;
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 50;
+    width: 2.75rem;
+    height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--toggle-border);
+    background: var(--toggle-bg);
+    color: var(--toggle-fg);
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
+    transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+  .theme-toggle:hover {
+    transform: translateY(-1px) scale(1.04);
+    color: var(--accent-hover);
+  }
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--accent-hover);
+    outline-offset: 3px;
+  }
+  .theme-toggle svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: block;
+  }
+  .theme-toggle .icon-moon { display: none; }
+  :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+  :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
 
   /* Publications */
   .publications .publication {
@@ -58,11 +164,40 @@
     text-decoration: underline;
   }
 
+  /* Translucent rounded box behind the hovered publication. It sits on a
+     pseudo-element so appearing does not shift the layout. At 50% opacity
+     these colors render as the footer color over the plain page background,
+     while the background lines still show through. */
+  :root {
+    --pub-hover-bg: rgba(46, 39, 37, 0.5);
+  }
+  :root[data-theme="light"] {
+    --pub-hover-bg: rgba(227, 211, 185, 0.5);
+  }
+  .publication {
+    position: relative;
+  }
+  .publication::before {
+    content: '';
+    position: absolute;
+    inset: -0.75rem;
+    z-index: -1;
+    border-radius: 14px;
+    background: var(--pub-hover-bg);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+  .publication:hover::before,
+  .publication:focus-within::before {
+    opacity: 1;
+  }
+
   /* Header */
   header {
     width: 100%;
     height: 70px;
-    background-color: rgba(32, 29, 27, 0.72);
+    background-color: var(--header-bg);
     background-image: url('https://aditijc.github.io/images/header.png');
     background-size: cover;
     background-repeat: no-repeat;
@@ -74,7 +209,7 @@
   header h1 {
     font-size: 1.5rem;
     font-weight: normal;
-    color: #fff8f4;
+    color: var(--text);
     text-align: left;
     position: absolute;
     top: 50%;
@@ -94,40 +229,6 @@
     display: block;
   }
 
-  .header-actions {
-    display: none;
-    gap: 0.75rem;
-    align-items: center;
-  }
-  .header-actions a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-  }
-  .header-actions img {
-    width: 60%;
-    height: auto;
-  }
-  /* header img {
-    width: 300px;
-    height: 50px;
-    border-radius: 50%;
-    margin-bottom: 1rem;
-  } */
-  /* header h2 {
-    font-size: 1.75rem;
-    font-weight: normal;
-    margin-top: 0.75rem;
-    color: #a82500;
-  }
-  header h3 {
-    font-size: 1.75rem;
-    font-weight: normal;
-    margin-top: 0.75rem;
-    color: #fff8f4;
-  } */
 
   /* Buttons (shared) */
   .buttons {
@@ -154,44 +255,32 @@
     font-size: 1.5rem;
     margin-bottom: 0.25rem;
     font-weight: 400;
-    color: rgb(184, 30, 3) !important;
+    color: var(--accent) !important;
   }
   .content-section h3 {
     font-size: 1.1rem;
     margin-bottom: 0.25rem;
     font-weight: 400;
-    color: #fff8f4;
+    color: var(--text);
   }
   .content-section p {
     font-size: 0.9rem;
-    font-weight: 300;
-    color: #fff8f4;
-  }
-  .intro-text {
-    font-style: italic;
-    font-size: 1.1rem !important;
-    font-weight: 400 !important;
-    margin-bottom: 1rem;
-    /* text-align: center; */
-  }
-  .bio-text {
-    text-align: left;
-    margin-bottom: 0;
+    color: var(--text);
   }
 
   /* News / Projects */
-  .news-item, .project-item {
+  .news-item {
     display: grid;
     grid-template-columns: 150px 1fr;
     align-items: left;
     margin-bottom: .5rem;
   }
-  .news-item span, .project-item span {
+  .news-item span {
     font-family: 'Lora', Georgia, serif;
     font-weight: bold;
-    color: #fff8f4;
+    color: var(--text);
   }
-  .news-item p, .project-item p {
+  .news-item p {
     margin: 0;
     padding-left: 0.5rem;
   }
@@ -200,24 +289,27 @@
   footer {
     width: 100%;
     height: 150px;
-    background: #272220;
+    background: var(--footer-bg);
     text-align: center;
     padding: 1rem;
     font-size: 0.9rem;
-    color: #fff8f4;
+    color: var(--text);
+  }
+  footer p {
+    color: var(--footer-text);
   }
 
   /* Links */
   a {
-    color: #bc5100 !important;
+    color: var(--accent-link) !important;
     text-decoration: none;
   }
   a:hover {
-    color: rgb(235, 153, 0) !important;
+    color: var(--accent-hover) !important;
     text-decoration: underline;
   }
   a:visited {
-    color: rgb(182, 28, 1) !important;
+    color: var(--accent-visited) !important;
   }
 
   /* ——— New: Bio + Photo Layout ——— */
@@ -247,13 +339,26 @@
   .profile-bio .buttons {
     margin-top: 1rem;
   }
+  /* Raise the photo and icons toward the name block. The shift is limited
+     so the photo stays clear of the name, which ends about 1028px across,
+     and the subtitle, which ends about 637px across. */
+  @media (min-width: 1250px) {
+    .profile-bio .bio-right {
+      margin-top: -70px;
+    }
+  }
+  @media (min-width: 1650px) {
+    .profile-bio .bio-right {
+      margin-top: -200px;
+    }
+  }
 
   /* Responsive adjustments */
   @media (max-width: 1000px) {
     .content-section {
       margin: 2.5rem 2.5rem;
     }
-    .news-item, .project-item {
+    .news-item {
       grid-template-columns: 1fr;
     }
     .profile-bio {
@@ -280,9 +385,6 @@
       margin: 0;
       padding-left: 0.75rem;
     }
-    .header-actions {
-      display: none;
-    }
     .bird-link {
       display: none;
     }
@@ -301,12 +403,9 @@
       align-items: flex-start;
       gap: 1rem;
     }
-    .profile-bio .bio-text {
-      text-align: left;
-    }
     .profile-bio h1 {
       line-height: 1.15;
-      color: #fff8f4 !important;
+      color: var(--text) !important;
     }
     .profile-bio h2 {
       font-size: 1.05rem !important;
@@ -322,7 +421,7 @@
       max-width: 280px;
       height: auto;
       border-radius: 24px;
-      box-shadow: 0 18px 40px rgb(0 0 0 / 0.35);
+      box-shadow: var(--photo-shadow);
       order: -1;
       margin-bottom: 0.5rem;
     }
@@ -346,6 +445,10 @@
       width: 60% !important;
       height: auto !important;
     }
+    .theme-toggle {
+      right: 1rem;
+      bottom: 1rem;
+    }
   }
 
   @media (max-width: 480px) {
@@ -357,7 +460,9 @@
       align-items: stretch;
     }
     .publications .pub-image {
+      flex: 0 0 auto;
       width: 100%;
+      max-width: 240px;
       margin: 0 0 1rem;
     }
     .profile-photo {
@@ -369,5 +474,3 @@
       height: 40px;
     }
   }
-
-  

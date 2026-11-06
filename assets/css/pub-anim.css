@@ -1,0 +1,112 @@
+/*
+ * Publication thumbnails: border, plus a looping animation through frames
+ * taken from each paper's figures. Each paper has its own transition and
+ * pace, and they start out of step.
+ */
+:root {
+  --pub-border: #fff8f4;
+}
+:root[data-theme="light"] {
+  --pub-border: #bc5100; /* burnt orange */
+}
+
+.pub-image {
+  box-sizing: border-box;
+  border: 2px solid var(--pub-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.pub-anim {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #140805;
+}
+
+.pub-frame {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: backwards;
+}
+
+.pub-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+/* Caption: small text at the top left, over a soft fade from the top edge. */
+.pub-frame span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  padding: 7px 9px 24px;
+  background: linear-gradient(to top, rgba(30, 12, 6, 0), rgba(30, 12, 6, 0.72));
+  color: #fff8f4;
+  font-family: Seravek, 'Gill Sans Nova', 'Source Sans 3', Calibri, sans-serif;
+  font-weight: 300;
+  font-size: 0.58rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ——— EquiReg: slow push-in and crossfade ——— */
+.pub-anim--equireg .pub-frame {
+  animation-name: pub-drift;
+  animation-duration: 10.4s;
+  animation-delay: calc(var(--i) * 2.6s);
+}
+@keyframes pub-drift {
+  0%    { opacity: 0; transform: scale(1); }
+  9%    { opacity: 1; }
+  25%   { opacity: 1; }
+  34%   { opacity: 0; transform: scale(1.09); }
+  100%  { opacity: 0; transform: scale(1.09); }
+}
+
+/* ——— VARS-fUSI: toggles between two frames, the signal blooming in ——— */
+.pub-anim--vars .pub-frame {
+  animation-name: pub-bloom;
+  animation-duration: 7.6s;
+  animation-delay: calc(var(--i) * 3.8s - 1.3s);
+}
+@keyframes pub-bloom {
+  0%     { opacity: 0; filter: brightness(0.45) saturate(1.3); }
+  18%    { opacity: 1; filter: brightness(1.4) saturate(1.3); }
+  33%    { opacity: 1; filter: brightness(1.05) saturate(1.1); }
+  50%    { opacity: 1; filter: brightness(1.05) saturate(1.1); }
+  63%    { opacity: 0; filter: brightness(0.7); }
+  100%   { opacity: 0; filter: brightness(0.45); }
+}
+
+/* ——— MRI: greyscale crossfade, no captions ——— */
+.pub-anim--nomri .pub-frame {
+  animation-name: pub-fade-6;
+  animation-timing-function: linear;
+  animation-duration: 13.2s;
+  animation-delay: calc(var(--i) * 2.2s);
+}
+@keyframes pub-fade-6 {
+  0%      { opacity: 0; }
+  5.3%    { opacity: 1; }
+  16.67%  { opacity: 1; }
+  21.97%  { opacity: 0; }
+  100%    { opacity: 0; }
+}
+
+/* No motion: hold on the frame showing the method's result. */
+@media (prefers-reduced-motion: reduce) {
+  .pub-anim .pub-frame {
+    animation: none;
+    opacity: 0;
+  }
+  .pub-anim .pub-frame--rest {
+    opacity: 1;
+  }
+}
