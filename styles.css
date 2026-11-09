@@ -17,6 +17,7 @@
     --accent-link: #bc5100;
     --accent-hover: rgb(235, 153, 0);
     --accent-visited: rgb(182, 28, 1);
+    --bird-cover: #6e5233; /* the ribbon color that covers the page between pages */
   }
   :root[data-theme="light"] {
     --bg: #f7efdd;
@@ -33,6 +34,7 @@
     --accent-link: #b0642a;
     --accent-hover: #cf9a3f;
     --accent-visited: #9e4a33;
+    --bird-cover: #ead8ba;
   }
 
   h1, h2, h3 {
@@ -80,9 +82,32 @@
     background: var(--bg);
   }
 
-  /* Light theme uses the same header artwork with the bird recoloured red */
+  /* Light theme uses the same header artwork with the bird recoloured red.
+     The bird and ribbon are separate layers so the bird can fly off alone. */
   :root[data-theme="light"] header {
-    background-image: url('images/header_light.png');
+    background-image: url('images/header_light_bird.png'), url('images/header_light_ribbon.png');
+  }
+  :root.bird-flying header {
+    background-image: url('images/header_ribbon.png');
+  }
+  :root[data-theme="light"].bird-flying header {
+    background-image: url('images/header_light_ribbon.png');
+  }
+
+  /* After a bird click, the next page starts under the ribbon, which then
+     trails off to the left, the way the bird flew. */
+  :root.bird-arriving::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    pointer-events: none;
+    background: var(--bird-cover);
+    animation: bird-reveal 0.85s cubic-bezier(0.6, 0, 0.3, 1) 0.1s both;
+  }
+  @keyframes bird-reveal {
+    from { clip-path: polygon(-15% 0, 130% 0, 115% 100%, -15% 100%); }
+    to   { clip-path: polygon(-15% 0, -15% 0, -30% 100%, -15% 100%); }
   }
 
   /* Name in the header: a slightly darker shade of the bird red (#b23424) */
@@ -205,7 +230,7 @@
     width: 100%;
     height: 70px;
     background-color: var(--header-bg);
-    background-image: url('https://aditijc.github.io/images/header.png');
+    background-image: url('images/header_bird.png'), url('images/header_ribbon.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top;
@@ -234,6 +259,15 @@
     height: 40%;
     cursor: pointer;
     display: block;
+  }
+  /* No focus tint from Pico after a click; keyboard focus still gets an outline. */
+  .bird-link,
+  .bird-link:focus {
+    background-color: transparent;
+  }
+  .bird-link:focus-visible {
+    outline: 2px solid var(--accent-hover);
+    outline-offset: -2px;
   }
 
 
