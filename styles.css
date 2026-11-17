@@ -309,6 +309,37 @@
     color: var(--text);
   }
 
+  /* Watch list (movies-to-watch page) */
+  .watch-list {
+    margin-top: 1rem;
+    padding-left: 1.1rem;
+  }
+  .watch-list li {
+    list-style: '– ';
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .watch-list a {
+    font-family: 'Lora', Georgia, serif;
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    text-underline-offset: 3px;
+    background-color: transparent;
+  }
+  .watch-list a:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+  .watch-list em {
+    margin-left: 0.4rem;
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 300;
+    opacity: 0.7;
+  }
+
   /* News / Projects */
   .news-item {
     display: grid;
